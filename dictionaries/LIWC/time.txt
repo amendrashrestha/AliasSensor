@@ -1,0 +1,340 @@
+aldrig
+alltid
+den senaste tiden
+då
+efter
+efteråt
+era
+evig
+fort
+fortfarande
+framför
+framåt
+frekvent
+före
+förrän
+först
+först och främst
+förstasortering
+igen
+innan
+sedan
+sen
+senast
+skyndsamt
+snabb
+snart
+som
+stilla
+till
+tillbaka
+ännu
+vår
+under
+typ
+vanligen
+ändå
+konstant
+längre
+medan
+min
+nu
+när
+när som helst
+någonsin
+ofta
+omedelbart
+oändlig
+oändligt
+börja
+började
+börjar
+händer
+slutade
+starta
+startade
+startar
+startat
+slutat
+gällande
+skynda
+så småningom
+nyligen
+samtidigt
+följd
+term
+en gång
+för det första
+före detta
+hej då
+avbryta
+besöka
+förfall
+gilla
+vanlig
+avsluta
+dröja
+eftertanke
+enstaka
+skjuta upp
+stopp
+stoppa
+stoppade
+stoppar
+stoppat
+temporärt
+tillfälligt
+någon gång
+upphöra
+ursprung
+för evigt
+historia
+ibland
+middag
+baka
+abrupt
+afton
+aktuell
+aktuell erfarenhet
+alla redan
+april
+augusti
+backa
+baks
+barndom
+befara
+befarade
+befarar
+befarat
+besöker
+besökte
+blekna
+bleknar
+början
+börjat
+cykel
+dag
+dagligen
+date
+datum
+december
+decennium
+dejt
+det senaste
+dröjsmål
+efterföljande
+efterföljd
+efterklok
+eftermiddag
+efterräkning
+efterverkning
+epok
+ett tag
+evenemang
+evighet
+fall
+fart
+fd
+februari
+ålder
+åldrad
+åldrande
+uppföljning
+åldrar
+åldrat
+uppdatera
+upptagen
+upprepa
+upprepning
+äntligen
+upphör
+uppstart
+århundrade
+tvärt
+ögonblick
+ögonblickligen
+återvända
+ungdom
+ung
+år
+årlig
+årligen
+återkomma
+återkommande
+under tiden
+vecka
+veckans
+veckor
+varannan månad
+varannan vecka
+varje dag
+varje kväll
+varje natt
+varje vecka
+vartannat år
+äldst
+vinter
+ända till
+uråldrig
+äldre
+på grund av
+redan
+respektive
+rytm
+sakta
+saktare
+saktast
+samtidig
+schema
+sekunder
+sekvens
+senare
+senaste
+senior
+sent
+september
+sist
+sista
+skyndade
+skyndat
+slut
+sluta
+slutar
+slutet
+slutföra
+slutförde
+slutfört
+slutligen
+snabbare
+snabbast
+snabbhet
+snarast
+sommar
+start
+starta upp
+startare
+still
+ström
+stund
+ständig
+synk
+synka
+säsong
+söndag
+tag
+tajming
+temporär
+termin
+tid
+tidig
+tidigare
+tidigast
+tidsålder
+till sist
+tillbaks
+tillfällig
+tillfälliga
+timing
+timme
+tisdag
+torsdag
+kontinuerligt
+kork
+kväll
+kvällar
+kvällen
+livet efter detta
+längst
+lång
+lördag
+mars
+minut
+missöde
+mitt på dagen
+modern
+momang
+mondag
+morgon
+månad
+natt
+nattligen
+november
+nutid
+nuvarande
+ny
+nyare
+nyast
+närhelst
+nästa
+nätter
+nångång
+oavbruten
+odödlig
+oktober
+om kvällen
+omedelbar
+onsdag
+oupphörlig
+oändliga
+period
+perpetuell
+pga
+plugg
+plötslig
+plötsligt
+propp
+forn
+forntid
+fortare
+fortast
+fortgå
+fram till
+framtid
+fredag
+frekventera
+frekventeradebesökt
+frekventerar
+frekventerat
+föda
+född
+födelse
+födsel
+följa upp
+följande
+för närvarande
+föregå
+föregående
+förflutet
+förr
+gammal
+gemensam
+generation
+gå vidare
+hastighet
+hela tiden
+helg
+hittills
+händelse
+höst
+idag
+igångsättning
+igår
+ikväll
+ilade
+imorgon
+incident
+initiativ
+initiera
+inledande
+inledningsvis
+innevarande
+instans
+intervall
+januari
+jul
+juli
+juni
+kl.
+klocka
+klockan
+tja då
