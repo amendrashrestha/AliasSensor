@@ -1,0 +1,47 @@
+body {
+    padding-top: 60px;
+}
+
+.row > div {
+    margin-bottom: 10px;
+}
+
+.header {
+    min-height: 40px;
+}
+
+.navbar{
+    float: right;
+}
+
+.footer {
+    min-height: 40px;
+    text-align: right;
+    border-top:1px solid lightgray;
+    padding-top: 5px;
+}
+
+.header {
+    background: darkolivegreen;
+}
+
+.content {
+    /*background: lightskyblue;*/
+    min-height: 580px;
+}
+
+.sidebar-top {
+    min-height: 50px;
+    /*background: #dbdfe7;*/
+}
+
+.sidebar-middle {
+    min-height: 460px;
+    background-color: transparent;
+}
+
+.sidebar-bottom {
+    min-height: 50px;
+    /*background: #7e8aa0;*/
+    /*margin-bottom: -15px;*/
+}
