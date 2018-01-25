@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<body>
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="sidebar-top">
+                        <img src="/static/images/AliasSensorLogo.png"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 hidden-xs">
+                    <div class="sidebar-middle"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="sidebar-bottom"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <!--{{ url_for('predict') }}-->
+                <form method="POST" action="/">
+                    <label for="text1">Text 1:</label>
+              <textarea class="form-control" rows="5" name="text1" id = "text1"></textarea>
+                    <p></p>
+                   <label for="text2">Text 2:</label>
+              <textarea class="form-control" rows="5" name="text2" id = "text2"></textarea>
+                    <p></p>
+                    <button type="submit" class = "btn btn-success">Compare</button>
+                    </form>
+            </div>
+
+            <div class="content">
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="footer">
+                <p class="text-right"> &copy; Copyright 2018 Alias Sensor</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+</body>
+</html>
+
