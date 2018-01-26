@@ -37,7 +37,7 @@ def predict():
         return jsonify(accuracy = rf.score(x_test, y_test))
 
     except ValueError:
-        return jsonify("Please provide data!!")
+        return jsonify(accuracy = "Please provide data!!")
 
 def create_feature_vector(text1, text2):
     row = 0

@@ -3,7 +3,13 @@ __author__ = 'amendrashrestha'
 import pandas as pd
 from sklearn import model_selection
 from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import GridSearchCV
+from sklearn.calibration import  CalibratedClassifierCV
+from sklearn.pipeline import Pipeline
+from sklearn.svm import LinearSVC
 from sklearn.externals import joblib
+from sklearn.feature_selection import SelectPercentile, chi2
+
 import numpy as np
 import nltk
 import re
@@ -14,13 +20,120 @@ import AliasBackend.utilities.IOProperties as props
 import AliasBackend.utilities.IOReadWrite as IO
 
 
+def calibratedClassification():
+    fv_dataframe = pd.read_csv(props.feature_vector_filepath)
+
+    df = pd.DataFrame(fv_dataframe)
+
+    abs_result_df = abs(df.diff()).dropna()
+    X = abs_result_df.iloc[:,0:len(abs_result_df.columns)-1]
+    # print(X)
+
+    Y = abs_result_df.iloc[:, -1]
+
+    test_size = 0.2
+    seed = 7
+    kfold = 10
+
+    X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, test_size=test_size, random_state=seed)
+    # X_train, Y_train = split_dataset(abs_result_df, 0.7)
+
+    # testing_model_with_RandFor(x_train, y_train, x_test, y_test)
+
+    # print("Preprocessing finished!")
+    # percentiles = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    # #
+    percentiles = [100]
+    for p in percentiles:
+        testing_model_with_SVM(X_train, X_test, Y_train, Y_test, kfold, p)
+
+
+def testing_model_with_SVM(x_train, x_test, y_train, y_test, kfold, percentile):
+
+    penalty = 'l2'
+    loss = 'squared_hinge'
+
+    svc = LinearSVC(C=1.0, penalty=penalty, loss=loss, dual=True)
+
+    # pipeline = Pipeline([
+    #     ('featureselection', SelectPercentile(chi2, percentile=percentile)),
+    #     ('model', svc)
+    # ])
+
+    # print(x_train)
+    # print("--------")
+    # print(y_train)
+
+    # params = dict(model__C=[2 ** -12, 2 ** -9, 2 ** -7, 2 ** -5, 2 ** -3, 2 ** -1, 2 ** 1])
+    # gs = GridSearchCV(estimator=pipeline, cv=kfold, param_grid=params)
+    # print('\nTraining model with', str(percentile), "% features")
+    clf = CalibratedClassifierCV(svc)
+    clf.fit(x_train, y_train)
+
+    # best_est = clf.best_estimator_
+    #Saving model
+    joblib.dump(clf, props.cal_svm_model_filename)
+
+    print('Testing model')
+    # Save the classifiers predictions and create confusion matrix
+
+    accuracy = clf.score(x_test, y_test)
+    # print(accuracy)
+    print("Accuracy: %.2f%%" % (accuracy * 100))
+
+def logistic_regression():
+    fv_dataframe = pd.read_csv(props.feature_vector_filepath)
+
+    df = pd.DataFrame(fv_dataframe)
+
+    abs_result_df = abs(df.diff()).dropna()
+    X = abs_result_df.iloc[:,0:len(abs_result_df.columns)-1]
+    # print(X)
+
+    Y = abs_result_df.iloc[:, -1]
+
+    test_size = 0.2
+    seed = 7
+    kfold = 10
+
+    X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, test_size=test_size, random_state=seed)
+
+    # Fit the model on 33%
+    model = LogisticRegression()
+    model.fit(X_train, Y_train)
+    # save the model to disk
+    # filename = 'finalized_model.sav'
+    # joblib.dump(model, filename)
+
+    # some time later...
+
+    # load the model from disk
+    # loaded_model = joblib.load(prop.model_filename)
+    result = model.score(X_test, Y_test)
+    print(result)
+
+def testing_cali_model():
+    text1 = "hej, skulle ominstallera datorn tänkte jag. Har gjort det tidigare men har nu glömt hur jag gjorde. Det jag vet är att jag inte behövde använda ngn skiva eller något annat. OM ngn kunde hjälpa hade det varit enormt bra,"
+    text2 = "MPC-HC har som bekant övergetts och jag letar efter alternativ. VLC är självklart det första programmet man tänker på. Men en av mina kravspecifikationer är att programmet skal kunna hoppa till nästa fil utan att man måste krångla med playlists, och det kan inte VLC. MPC-HC kan detta (Page Down för nästa, Page Up för föregående)."
+
+    fv_dataframe = create_feature_vector_temp(text1, text2)
+    df = pd.DataFrame(fv_dataframe)
+    abs_fv = abs(df.diff()).dropna()
+    # print(abs_fv)
+    x_test = abs_fv.iloc[:,0:len(abs_fv.columns)-1]
+    # y_test = abs_fv.iloc[:, -1]
+
+    loaded_model = joblib.load(props.cal_svm_model_filename)
+    predicted_test_scores = loaded_model.predict_proba(x_test)
+    print(predicted_test_scores)
+
 def classification():
     #
     # url = "https://archive.ics.uci.edu/ml/machine-learning-databases/pima-indians-diabetes/pima-indians-diabetes.data"
     # names = ['preg', 'plas', 'pres', 'skin', 'test', 'mass', 'pedi', 'age', 'class']
     # dataframe = pd.read_csv(url, names=names)
 
-    fv_dataframe = pd.read_csv(prop.feature_vector_sample_filepath)
+    fv_dataframe = pd.read_csv(props.feature_vector_sample_filepath)
 
     df = pd.DataFrame(fv_dataframe)
 
@@ -186,9 +299,19 @@ def create_feature_vector_temp(text1, text2):
     return vector
 
 if __name__ == "__main__":
+    # calibratedClassification()
+    testing_cali_model()
+    # logistic_regression()
     # classification()
     # get_diff()
-    fv_dataframe = create_feature_vector_temp("this is stest", "asfjdls lkajsdlk jalkfj klajsd l")
-    df = pd.DataFrame(fv_dataframe)
-    abs_fv = abs(df.diff()).dropna()
-    print(abs_fv)
+
+    #
+    # svm = joblib.load(props.svm_model_filename)
+    # # clf = CalibratedClassifierCV(svm)
+    # accuracy_predict = svm.predict(x_test)
+    # print(accuracy_predict)
+    #
+    # accuracy = svm.score(x_test, y_test)
+    # print(accuracy)
+    # predicted_test_scores= clf.predict_proba(x_test)
+    # print(predicted_test_scores)

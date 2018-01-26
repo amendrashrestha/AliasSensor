@@ -10,5 +10,5 @@ feature_vector_sample_filepath = os.path.expanduser('~') + "/Desktop/AliasMatchi
 
 svm_model_filename = os.path.expanduser('~') + '/repo/AliasSensor/AliasBackend/models/svm_finalized_model.sav'
 rf_model_filename = os.path.expanduser('~') + '/repo/AliasSensor/AliasBackend/models/rf_finalized_model.sav'
-
+cal_svm_model_filename = os.path.expanduser('~') + '/repo/AliasSensor/AliasBackend/models/cal_svm_finalized_model.sav'
 
