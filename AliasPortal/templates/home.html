@@ -2,21 +2,21 @@
 <html>
 <body>
 <head>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script type=text/javascript>
-    $(function() {
-      $('button#calculate').bind('click', function() {
-        $.getJSON('/predict', {
-          text1: $('textarea[name="text1"]').val(),
-          text2: $('textarea[name="text2"]').val()
-        }, function(data) {
-            console.log(data.accuracy)
-          $("#pred_result").text(data.accuracy);
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type=text/javascript>
+        $(function() {
+            $('button#calculate').bind('click', function() {
+                $.getJSON('/predict', {
+                    text1: $('textarea[name="text1"]').val(),
+                    text2: $('textarea[name="text2"]').val()
+                }, function(data) {
+                    console.log(data.accuracy)
+                    $("#pred_result").text(data.accuracy);
+                });
+                return false;
+            });
         });
-        return false;
-      });
-    });
- </script>
+    </script>
 </head>
 
 {% extends "layout.html" %}
@@ -27,26 +27,19 @@
     <div class="row">
         <div class="col-sm-9">
             <div class="form-group">
-
-                    <label for="text1">Text 1:</label>
-              <textarea class="form-control" rows="5" name="text1" id = "text1"></textarea>
-                    <p></p>
-                   <label for="text2">Text 2:</label>
-              <textarea class="form-control" rows="5" name="text2" id = "text2"></textarea>
-                    <p></p>
-                    <button class = "btn btn-success" id="calculate">Compare</button>
-
-
-            </div>
-
-            <div class="content">
-
+                <label for="text1">Text 1:</label>
+                <textarea class="form-control" rows="5" name="text1" id = "text1"></textarea>
+                <p></p>
+                <label for="text2">Text 2:</label>
+                <textarea class="form-control" rows="5" name="text2" id = "text2"></textarea>
+                <p></p>
+                <button class = "btn btn-success" id="calculate">Compare</button>
             </div>
         </div>
         <div class="col-sm-3">
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="sidebar-top">
+                    <div class="sidebar-top centered">
                         <img src="/static/images/AliasSensorLogo.png"/>
                     </div>
                 </div>
@@ -54,7 +47,7 @@
             <div class="row">
                 <div class="col-sm-12 hidden-xs">
                     <div class="sidebar-middle">
-                        <span id="pred_result"></span>
+                        <span id="pred_result" class="centered"></span>
                     </div>
                 </div>
             </div>

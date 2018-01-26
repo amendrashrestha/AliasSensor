@@ -38,6 +38,8 @@ body {
 .sidebar-middle {
     min-height: 460px;
     background-color: transparent;
+    border: 2px;
+    border-color: black;
 }
 
 .sidebar-bottom {
@@ -52,4 +54,20 @@ body {
     font-family: courier;
     color: DodgerBlue;
     text-align: center;
+}
+
+@media (max-width: 768px) {
+    .centered {
+        float: none;
+        margin:0 auto;
+        text-align:center;
+    }
+}
+
+@media (max-width: 768px) {
+    #pred_result {
+        float: none;
+        margin:0 auto;
+        text-align:center;
+    }
 }
