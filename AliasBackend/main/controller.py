@@ -69,8 +69,9 @@ def classification():
         # testing_model_with_RandFor(x_train, y_train, x_test, y_test)
 
         # print("Preprocessing finished!")
-        percentiles = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-        #
+        # percentiles = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+        # #
+        percentiles = [100]
         for p in percentiles:
             testing_model_with_SVM(X_train, X_test, Y_train, Y_test, kfold, p)
 
@@ -113,7 +114,7 @@ def testing_model_with_SVM(x_train, x_test, y_train, y_test, kfold, percentile):
 
     params = dict(model__C=[2 ** -12, 2 ** -9, 2 ** -7, 2 ** -5, 2 ** -3, 2 ** -1, 2 ** 1])
     gs = GridSearchCV(estimator=pipeline, cv=kfold, param_grid=params)
-    print('\nTraining model with', str(percentile), "% features")
+    # print('\nTraining model with', str(percentile), "% features")
     gs.fit(x_train, y_train)
 
     best_est = gs.best_estimator_
@@ -123,18 +124,19 @@ def testing_model_with_SVM(x_train, x_test, y_train, y_test, kfold, percentile):
     print('Time training:', time.time() - start_train)
 
     # logger_params = str(percentile) + '_' + str(kfold) + '_' + str(min_df) + '_' + str(max_df)
-    logger_params = str(percentile) + '_' + str(kfold)
+    # logger_params = str(percentile) + '_' + str(kfold)
     # svm_training_<n_features>_<kfold>_<min_df>_<max_df>.log
-    training_logger_name = os.environ['HOME'] + '/Desktop/AliasMatching/log/svm_training_' + logger_params + '.log'
+    # training_logger_name = os.environ['HOME'] + '/Desktop/AliasMatching/log/svm_training_' + logger_params + '.log'
     # svm_testing_<n_features>_<kfold>_<min_df>_<max_df>.log
-    testing_logger_name = os.environ['HOME'] + '/Desktop/AliasMatching/log/svm_testing_' + logger_params + '.log'
+    testing_logger_name = os.environ['HOME'] + '/Desktop/AliasMatching/log/svm_testing_' + "logger_params" + '.log'
 
-    with open(training_logger_name, 'w') as f:
-        f.write('Result from grid search cross validation:\n')
-        for k in gs.cv_results_.keys():
-            f.write(k + "\t" + str(gs.cv_results_[k]) + '\n')
-        f.write('\nBest estimator parameters:\n')
-        f.write(str(best_est.get_params()))
+
+    # with open(training_logger_name, 'w') as f:
+    #     f.write('Result from grid search cross validation:\n')
+    #     for k in gs.cv_results_.keys():
+    #         f.write(k + "\t" + str(gs.cv_results_[k]) + '\n')
+    #     f.write('\nBest estimator parameters:\n')
+    #     f.write(str(best_est.get_params()))
 
     print('Testing model')
     # Save the classifiers predictions and create confusion matrix
