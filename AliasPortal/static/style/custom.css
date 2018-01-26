@@ -45,3 +45,11 @@ body {
     /*background: #7e8aa0;*/
     /*margin-bottom: -15px;*/
 }
+
+#pred_result {
+    padding: 40px;
+    font-size: 400%;
+    font-family: courier;
+    color: DodgerBlue;
+    text-align: center;
+}
