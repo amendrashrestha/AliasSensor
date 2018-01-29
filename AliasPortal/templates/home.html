@@ -11,7 +11,12 @@
                     text2: $('textarea[name="text2"]').val()
                 }, function(data) {
                     console.log(data.accuracy)
-                    $("#pred_result").text(data.accuracy);
+                    if (data.accuracy == 1){
+                        $("#pred_result").text("Diff User");
+                        }
+                        else{
+                        $("#pred_result").text("Same User");
+                        }
                 });
                 return false;
             });
@@ -45,19 +50,27 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-12 hidden-xs">
-                    <div class="sidebar-middle">
+                <div class="col-sm-12">
+                    <div class="sidebar-middle centered">
                         <span id="pred_result" class="centered"></span>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-12 hidden-xs">
                     <div class="sidebar-bottom"></div>
                 </div>
             </div>
         </div>
-
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="broweFile">
+                <label class="btn btn-default">
+                    <input type="file" hidden>
+                </label>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-sm-12">

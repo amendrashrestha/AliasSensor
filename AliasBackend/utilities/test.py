@@ -15,6 +15,8 @@ import nltk
 import re
 import string
 import traceback
+import warnings
+warnings.filterwarnings("ignore")
 
 import AliasBackend.utilities.IOProperties as props
 import AliasBackend.utilities.IOReadWrite as IO
@@ -113,19 +115,41 @@ def logistic_regression():
     print(result)
 
 def testing_cali_model():
+    # 0 = same user
+    # 1 = diff user
     text1 = "hej, skulle ominstallera datorn tänkte jag. Har gjort det tidigare men har nu glömt hur jag gjorde. Det jag vet är att jag inte behövde använda ngn skiva eller något annat. OM ngn kunde hjälpa hade det varit enormt bra,"
-    text2 = "MPC-HC har som bekant övergetts och jag letar efter alternativ. VLC är självklart det första programmet man tänker på. Men en av mina kravspecifikationer är att programmet skal kunna hoppa till nästa fil utan att man måste krångla med playlists, och det kan inte VLC. MPC-HC kan detta (Page Down för nästa, Page Up för föregående)."
+    text2 = "Knappt märkbart.Om du är så angelägen om säkerheten så ta en titt på inlägg #5581 gällande Comodo Bv. Värt att prova ?! Comodo har en sandbox inbyggd som går att använda på samma sätt som Sandboxie enligt tidigare länk. "
+
+    text1 = "allokera allt allt som oftast"
+    text2 = text1
 
     fv_dataframe = create_feature_vector_temp(text1, text2)
+    # print(fv_dataframe[0])
+    # print(fv_dataframe[1])
     df = pd.DataFrame(fv_dataframe)
+    print(df)
     abs_fv = abs(df.diff()).dropna()
     # print(abs_fv)
     x_test = abs_fv.iloc[:,0:len(abs_fv.columns)-1]
     # y_test = abs_fv.iloc[:, -1]
 
     loaded_model = joblib.load(props.cal_svm_model_filename)
+
+    # Predicted class labels from test features
+    pred_class = loaded_model.predict(x_test)
+    print(pred_class)
+    if pred_class == 1:
+        print("Label: " + "Diff User")
+    else:
+        print("Label: " + "Same User")
+
+    # Predicted probabilities from test features
     predicted_test_scores = loaded_model.predict_proba(x_test)
-    print(predicted_test_scores)
+
+    print("Classes" + str(loaded_model.classes_))
+    # print(predicted_test_scores)
+    print("Probability for label 0" + str(predicted_test_scores[:, 0]))
+    print("Probability for label 1" + str(predicted_test_scores[:, 1]))
 
 def classification():
     #
@@ -219,16 +243,20 @@ def create_feature_vector_temp(text1, text2):
 
     LIWC, word_lengths, digits, symbols, smilies, functions, user_id, features, header_feature = IO.FV_header()
     all_text = []
+
+
     all_text.append(text1)
     all_text.append(text2)
 
     # x = "länka till reportage ur massmedia. Det ska då vara sakliga reportage med integrations- och invandringspolitiska teman. @ 02:30-03:25. "
     vector_all = []
 
-    vector = np.zeros((2, len(features)))
+    vector = np.zeros((len(all_text), len(features)))
+
+    # print(vector)
 
     for x in all_text:
-
+        # print(x)
         x = x.lower()
         split_text = x.split()
         text_size = len(split_text)
@@ -287,14 +315,18 @@ def create_feature_vector_temp(text1, text2):
                 vector[row][col] = sum(1 for i in re.finditer(feat, x_wo_punct)) / text_size
 
             # # Adding userId
+
             elif col < len(LIWC) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions) + len(user_id):
                 vector[row][col] = float(user)
-
+                # print("User: " + str(user))
 
             if col == len(features) - 1:
                 col = 0
                 break
             col += 1
+        row += 1
+        # print(vector)
+        # print("---------------------------------")
 
     return vector
 
