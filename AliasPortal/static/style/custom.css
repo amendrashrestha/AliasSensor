@@ -36,7 +36,8 @@ body {
 }
 
 .sidebar-middle {
-    min-height: 460px;
+    /*min-height: 460px;*/
+    min-height: 50px;
     background-color: transparent;
     border: 2px;
     border-color: black;
@@ -44,13 +45,14 @@ body {
 
 .sidebar-bottom {
     min-height: 50px;
+    padding-bottom: 20px;
     /*background: #7e8aa0;*/
     /*margin-bottom: -15px;*/
 }
 
 #pred_result {
-    padding: 40px;
-    font-size: 400%;
+    padding: 11px;
+    font-size: 190%;
     font-family: courier;
     color: DodgerBlue;
     text-align: center;
@@ -64,10 +66,12 @@ body {
     }
 }
 
-@media (max-width: 768px) {
-    #pred_result {
-        float: none;
-        margin:0 auto;
-        text-align:center;
+@media screen and (max-width: 768px) {
+    .sidebar-bottom {
+       visibility: hidden;
+        clear: both;
+        display: none;
     }
 }
+
+

@@ -8,6 +8,8 @@ import nltk
 
 import string
 import re
+import warnings
+warnings.filterwarnings("ignore")
 
 import AliasBackend.utilities.IOProperties as props
 import AliasBackend.utilities.IOReadWrite as IO
@@ -34,7 +36,11 @@ def predict():
 
     try:
         rf = joblib.load('static/model/svm_finalized_model.sav')
+
+        #accuracy = rf.score(x_test, y_test)
+        # print(accuracy + "%")
         return jsonify(accuracy = rf.score(x_test, y_test))
+
 
     except ValueError:
         return jsonify(accuracy = "Please provide data!!")
@@ -51,9 +57,8 @@ def create_feature_vector(text1, text2):
     all_text.append(text2)
 
     # x = "länka till reportage ur massmedia. Det ska då vara sakliga reportage med integrations- och invandringspolitiska teman. @ 02:30-03:25. "
-    vector_all = []
 
-    vector = np.zeros((2, len(features)))
+    vector = np.zeros((len(all_text), len(features)))
 
     for x in all_text:
 
@@ -123,7 +128,7 @@ def create_feature_vector(text1, text2):
                 col = 0
                 break
             col += 1
-
+        row += 1
     return vector
 
 if __name__ == '__main__':
