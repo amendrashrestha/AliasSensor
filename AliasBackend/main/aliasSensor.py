@@ -5,11 +5,11 @@ import os
 
 sys.path.append(os.environ['HOME'] + "/repo/AliasSensor/")
 
-from AliasBackend.main.controller import classification
+from AliasBackend.main.controller import classification, init
 
 def main():
-    # init()
-    classification()
+    init()
+    # classification()
 
 if __name__ == "__main__":
     main()

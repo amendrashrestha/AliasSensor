@@ -11,12 +11,14 @@ collection = db['posts']
 # returns user having post count greater than 30 and less than 100
 def get_users():
     try:
-        user_query = collection.aggregate([{"$group": {'_id':"$username", 'count':{'$sum':1}}}, {'$match': {'count': {'$gt': 30, '$lt' : 100}}}])#, { "$limit": 2 }, {'$sort':{"count": -1}}
+        # user_query = collection.aggregate([{"$group": {'_id':"$username", 'count':{'$sum':1}}}, {'$match': {'count': {'$gt': 30, '$lt' : 100}}}])#, { "$limit": 2 }, {'$sort':{"count": -1}}
+        user_query = collection.distinct('username')
         user_list = []
 
         for user in user_query:
-           user = user['_id']
-           user_list.append(user)
+            if user is not None:
+           # user = user['_id']
+                user_list.append(user)
     except Exception:
         traceback.print_exc()
 
