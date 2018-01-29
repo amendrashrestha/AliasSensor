@@ -20,7 +20,9 @@ import AliasBackend.model.dbScript as db
 import AliasBackend.utilities.IOProperties as prop
 from AliasBackend.main.featureCreator import StyloFeatures
 from AliasBackend.utilities.test_evaluator import evaluator
+from sklearn.ensemble import VotingClassifier
 
+# VotingClassifier([LinearSVC(), RandomForestClassifier() ,voting="Sfot"])
 
 def init():
     users = db.get_users()
