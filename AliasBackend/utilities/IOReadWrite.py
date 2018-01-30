@@ -2,6 +2,7 @@ __author__ = 'amendrashrestha'
 import random
 import re
 import os
+import glob
 
 import AliasBackend.utilities.IOProperties as props
 
@@ -78,3 +79,6 @@ def FV_header():
     features = tmp_LIWC_header +  word_lengths + digits + symbols + smileys + functions + user_id
 
     return tmp_LIWC_header, word_lengths, digits, symbols_header, smilies_header, functions, user_id, features, header_feature
+
+def get_list_files(dir_path):
+    return glob.glob(dir_path+ "/*/*.bz2")

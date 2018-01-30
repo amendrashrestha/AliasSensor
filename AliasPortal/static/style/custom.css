@@ -52,11 +52,17 @@ body {
 
 #pred_result {
     padding: 11px;
-    font-size: 190%;
+    font-size: 150%;
     font-family: courier;
     color: DodgerBlue;
     text-align: center;
 }
+
+.centered {
+        float: none;
+        margin:0 auto;
+        text-align:center;
+    }
 
 @media (max-width: 768px) {
     .centered {
