@@ -10,14 +10,18 @@
                     text1: $('textarea[name="text1"]').val(),
                     text2: $('textarea[name="text2"]').val()
                 }, function(data) {
-                    console.log(data.accuracy)
-                    if (data.accuracy == 1){
+                    console.log(data)
+                    if (data.pred_class == 1){
                         $("#pred_result").text("Diff User");
                         }
                         else{
                         $("#pred_result").text("Same User");
                         }
-                });
+                        $("#same_user_prob").text("Same User Prob: "+ data.same_user_prob)
+                        $("#diff_user_prob").text("Diff User Prob: "+ data.diff_user_prob)
+                        $("#cosine_sim").text("Similarity: "+ data.cosine_sim)
+                    }
+                );
                 return false;
             });
         });
@@ -52,7 +56,10 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="sidebar-middle centered">
-                        <span id="pred_result" class="centered"></span>
+                        <p id="pred_result" class="centered"></p>
+                        <p id="same_user_prob" class="centered"></p>
+                        <p id="diff_user_prob" class="centered"></p>
+                        <p id="cosine_sim" class="centered"></p>
                     </div>
                 </div>
             </div>
@@ -65,11 +72,11 @@
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <div class="broweFile">
-                <label class="btn btn-default">
-                    <input type="file" hidden>
-                </label>
-            </div>
+            <!--<div class="browseFile btn btn-default">-->
+                <!--<label>-->
+                    <!--<input type="file" hidden>-->
+                <!--</label>-->
+            <!--</div>-->
         </div>
     </div>
     <div class="row">

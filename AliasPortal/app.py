@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 
 from sklearn.externals import joblib
+from sklearn.metrics.pairwise import cosine_similarity
 import traceback
 import pandas as pd
 import numpy as np
@@ -28,19 +29,34 @@ def predict():
 
     fv_dataframe = create_feature_vector(text1, text2)
 
+    # array_length = fv_dataframe.shape[1]
+    first_row = fv_dataframe[0][:-1]
+    second_row = fv_dataframe[1][:-1]
+
+    # print(first_row)
+    # print(second_row)
+
+    # cosine_sim = cosine_similarity(first_row, second_row)
+    # print(cosine_sim)
+
     df = pd.DataFrame(fv_dataframe)
     abs_fv = abs(df.diff()).dropna()
 
     x_test = abs_fv.iloc[:,0:len(abs_fv.columns)-1]
-    y_test = abs_fv.iloc[:, -1]
+    # y_test = abs_fv.iloc[:, -1]
 
     try:
-        rf = joblib.load('static/model/svm_finalized_model.sav')
+        rf = joblib.load('static/model/cal_svm_finalized_model.sav')
 
+        predicted_test_scores = rf.predict_proba(x_test)
         #accuracy = rf.score(x_test, y_test)
         # print(accuracy + "%")
-        return jsonify(accuracy = rf.score(x_test, y_test))
-
+        return jsonify(
+            pred_class = rf.predict(x_test)[0],
+            same_user_prob = str(predicted_test_scores[:, 0][0]),
+            diff_user_prob = str(predicted_test_scores[:, 1][0]),
+            cosine_sim = cosine_similarity(first_row, second_row)[0][0]
+        )
 
     except ValueError:
         return jsonify(accuracy = "Please provide data!!")
@@ -62,73 +78,79 @@ def create_feature_vector(text1, text2):
 
     for x in all_text:
 
-        x = x.lower()
-        split_text = x.split()
-        text_size = len(split_text)
+        try:
+            x = x.lower()
+            split_text = x.split()
+            text_size = len(split_text)
 
-        tmp_x = str.maketrans({key: None for key in string.punctuation})
-        x_wo_punct = x.translate(tmp_x)
+            tmp_x = str.maketrans({key: None for key in string.punctuation})
+            x_wo_punct = x.translate(tmp_x)
 
-        x_words = nltk.word_tokenize(x_wo_punct)
-        # print(x_words)
+            x_words = nltk.word_tokenize(x_wo_punct)
+            # print(x_words)
 
-        word_lengths_counts = nltk.FreqDist([len(tok) for tok in x_words])
+            word_lengths_counts = nltk.FreqDist([len(tok) for tok in x_words])
 
-        # for word, count in word_lengths_counts.most_common().sort():
-        #     print(word, count)
+            # for word, count in word_lengths_counts.most_common().sort():
+            #     print(word, count)
 
-        for feat in features:
-            # print(feat)
-            if col < len(LIWC):
-                LIWC_filepath = props.LIWC_filepath + feat
-                LIWC_words = IO.get_function_words(LIWC_filepath)
-                count = 0
-                try:
-                    for single_word in LIWC_words:
-                        count += sum(1 for i in re.finditer(single_word, x_wo_punct))
-                        # print(feat, single_word, count)
-                    avg_count = count / text_size
-                    # print(avg_count)
+            for feat in features:
+                # print(feat)
 
-                    vector[row][col] = avg_count
-                except Exception:
-                    traceback.print_exc()
+                if col < len(LIWC):
+                    LIWC_filepath = props.LIWC_filepath + feat
+                    LIWC_words = IO.get_function_words(LIWC_filepath)
+                    count = 0
+                    try:
+                        for single_word in LIWC_words:
+                            count += sum(1 for i in re.finditer(single_word, x_wo_punct))
+                            # print(feat, single_word, count)
+                        avg_count = count / text_size
+                        # print(avg_count)
 
-            # Count word lengths
-            elif col < len(LIWC) + len(word_lengths):
-                if int(feat) in word_lengths_counts.keys():
-                    vector[row][col] = word_lengths_counts.get(int(feat)) / text_size
-                else:
-                    vector[row][col] = 0
+                        vector[row][col] = avg_count
+                    except Exception:
+                        traceback.print_exc()
 
-            # Count digits
-            elif col < len(LIWC) + len(word_lengths) + len(digits):
-                vector[row][col] = x_wo_punct.count(feat) / text_size
+                # Count word lengths
+                elif col < len(LIWC) + len(word_lengths):
+                    if int(feat) in word_lengths_counts.keys():
+                        vector[row][col] = word_lengths_counts.get(int(feat)) / text_size
+                    else:
+                        vector[row][col] = 0
 
-            # Count special symbols
-            elif col < len(LIWC) + len(word_lengths) + len(digits) + len(symbols):
-                vector[row][col] = x.count(feat) / text_size
+                # Count digits
+                elif col < len(LIWC) + len(word_lengths) + len(digits):
+                    vector[row][col] = x_wo_punct.count(feat) / text_size
 
-            # Count smileys
-            elif col < len(LIWC) + len(word_lengths) + len(digits) + len(symbols) + len(smilies):
-                vector[row][col] = x.count(feat) / text_size
-                # print(feat, x.count(feat))
+                # Count special symbols
+                elif col < len(LIWC) + len(word_lengths) + len(digits) + len(symbols):
+                    vector[row][col] = x.count(feat) / text_size
 
-            # Count functions words
-            elif col < len(LIWC) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions):
-                # vector[row][col] = len(re.findall(feat, " ".join(x).lower())) / text_size
-                vector[row][col] = sum(1 for i in re.finditer(feat, x_wo_punct)) / text_size
+                # Count smileys
+                elif col < len(LIWC) + len(word_lengths) + len(digits) + len(symbols) + len(smilies):
+                    vector[row][col] = x.count(feat) / text_size
+                    # print(feat, x.count(feat))
 
-            # # Adding userId
-            elif col < len(LIWC) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions) + len(user_id):
-                vector[row][col] = float(user)
+                # Count functions words
+                elif col < len(LIWC) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions):
+                    # vector[row][col] = len(re.findall(feat, " ".join(x).lower())) / text_size
+                    vector[row][col] = sum(1 for i in re.finditer(feat, x_wo_punct)) / text_size
+
+                # # Adding userId
+                elif col < len(LIWC) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions) + len(user_id):
+                    vector[row][col] = float(user)
 
 
-            if col == len(features) - 1:
-                col = 0
-                break
-            col += 1
-        row += 1
+                if col == len(features) - 1:
+                    col = 0
+                    break
+                col += 1
+            row += 1
+
+        except Exception:
+            traceback.print_exc()
+
     return vector
 
 if __name__ == '__main__':
