@@ -215,9 +215,9 @@ def get_diff():
     print(abs_result)
     print("-------------")
 
-    abs_result.to_csv(prop.feature_vector_with_abs_filepath)
+    abs_result.to_csv(props.feature_vector_with_abs_filepath)
 
-    dataframe = pd.read_csv(prop.feature_vector_with_abs_filepath)
+    dataframe = pd.read_csv(props.feature_vector_with_abs_filepath)
 
 
 
@@ -330,13 +330,102 @@ def create_feature_vector_temp(text1, text2):
 
     return vector
 
+
+def create_english_feature_vector(text1, text2):
+    row = 0
+    col = 0
+
+    user = 1
+
+    characters, word_lengths, digits, symbols, smilies, functions, pos_tags, user_id, features, header_feature = IO.FV_English_header()
+
+    all_text = []
+    all_text.append(text1)
+    all_text.append(text2)
+
+    # x = "länka till reportage ur massmedia. Det ska då vara sakliga reportage med integrations- och invandringspolitiska teman. @ 02:30-03:25. "
+
+    vector = np.zeros((len(all_text), len(features)))
+
+    for x in all_text:
+        try:
+            x = x.lower()
+            split_text = x.split()
+            text_size = len(split_text)
+
+            tmp_x = str.maketrans({key: None for key in string.punctuation})
+            x_wo_punct = x.translate(tmp_x)
+
+            x_words = nltk.word_tokenize(x_wo_punct)
+            # print(x_words)
+            pos = nltk.FreqDist([b for (a, b) in nltk.pos_tag(x_wo_punct)])
+
+            word_lengths_counts = nltk.FreqDist([len(tok) for tok in x_words])
+
+            for feat in features:
+                if col < len(characters):
+                    vector[row][col] = " ".join(x).count(feat) / text_size
+
+                # Count word lengths
+                elif col < len(characters) + len(word_lengths):
+                    if int(feat) in word_lengths_counts.keys():
+                        vector[row][col] = word_lengths_counts.get(int(feat)) / text_size
+                    else:
+                        vector[row][col] = 0
+
+                # Count digits
+                elif col < len(characters) + len(word_lengths) + len(digits):
+                    vector[row][col] = x_wo_punct.count(feat) / text_size
+
+                # Count special symbols
+                elif col < len(characters) + len(word_lengths) + len(digits) + len(symbols):
+                    vector[row][col] = x.count(feat) / text_size
+
+                # Count smileys
+                elif col < len(characters) + len(word_lengths) + len(digits) + len(symbols) + len(smilies):
+                    vector[row][col] = x.count(feat) / text_size
+                    # print(feat, x.count(feat))
+
+                # Count functions words
+                elif col < len(characters) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions):
+                    # vector[row][col] = len(re.findall(feat, " ".join(x).lower())) / text_size
+                    vector[row][col] = sum(1 for i in re.finditer(feat, x_wo_punct)) / text_size
+
+                # Count POS tags
+                elif col < len(characters) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions)\
+                        + len(pos_tags):
+                    for tag in pos_tags:
+                        if tag in pos.keys():
+                            vector[row][col] = pos.get(tag) / text_size
+
+                # # Adding userId
+                elif col < len(characters) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions) +\
+                        len(pos_tags) + len(user_id):
+                    vector[row][col] = float(user)
+
+
+                if col == len(features) - 1:
+                    col = 0
+                    break
+                col += 1
+
+            row += 1
+
+        except Exception:
+            traceback.print_exc()
+
+    return vector
+
 if __name__ == "__main__":
     # calibratedClassification()
-    testing_cali_model()
+    # testing_cali_model()
     # logistic_regression()
     # classification()
     # get_diff()
+    text1 = "abaa de..."
+    text2 = "abc dher"
 
+    create_english_feature_vector(text1, text2)
     #
     # svm = joblib.load(props.svm_model_filename)
     # # clf = CalibratedClassifierCV(svm)

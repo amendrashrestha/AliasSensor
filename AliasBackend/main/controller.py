@@ -18,30 +18,45 @@ from tqdm import tqdm
 
 import AliasBackend.model.dbScript as db
 import AliasBackend.utilities.IOProperties as prop
-from AliasBackend.main.featureCreator import StyloFeatures
+from AliasBackend.main.swedishFeatureCreator import SwedishStyloFeatures
+from AliasBackend.main.englishFeatureCreator import EnglishStyloFeatures
 from AliasBackend.utilities.test_evaluator import evaluator
 from sklearn.ensemble import VotingClassifier
 
 # VotingClassifier([LinearSVC(), RandomForestClassifier() ,voting="Sfot"])
 
-def init():
+def init_swedish():
     users = db.get_users()
     # print(len(users)) -- 4713
     user_id = 1
-    print("Creating Stylometric features ..... \n")
+    print("Creating swedish text stylometric features ..... \n")
 
     for single_user in tqdm(users):
         # print(single_user)
         # single_user = "darknesss"
         posts = db.get_user_post(single_user)
 
-        StyloFeatures(user_id, posts)
+        SwedishStyloFeatures(user_id, posts)
         user_id += 1
 
         # print(len(User_A), len(User_B))
 
+def init_english():
+    print("Creating english text stylometric features ..... \n")
+    users = db.get_users()
+    # print(len(users)) -- 4713
+    user_id = 1
+
+    for single_user in tqdm(users):
+        # print(single_user)
+        # single_user = "darknesss"
+        posts = db.get_user_post(single_user)
+
+        EnglishStyloFeatures(user_id, posts)
+        user_id += 1
+
 def classification():
-    fv_dataframe = pd.read_csv(prop.feature_vector_filepath)
+    fv_dataframe = pd.read_csv(prop.englsih_feature_vector_filepath)
 
     try:
 

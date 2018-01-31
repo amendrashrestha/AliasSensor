@@ -32,7 +32,7 @@ for single_file in file_path:
             date = comment["created_utc"]
 
             db = mongo_object['reddit']
-            db['article'].insert({"id":id, "user": author, "date": date, "text": body})
+            db['posts'].insert({"id":id, "user": author, "date": date, "text": body})
 
         except exec():
             traceback.print_exc()
