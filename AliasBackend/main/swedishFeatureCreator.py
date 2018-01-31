@@ -12,7 +12,7 @@ import AliasBackend.utilities.IOProperties as props
 import AliasBackend.utilities.IOReadWrite as IO
 
 
-class StyloFeatures():
+class SwedishStyloFeatures():
     def __init__(self, user, posts):
         self.transform(user, posts)
 
