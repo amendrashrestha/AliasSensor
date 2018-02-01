@@ -133,7 +133,7 @@ def testing_cali_model():
     x_test = abs_fv.iloc[:,0:len(abs_fv.columns)-1]
     # y_test = abs_fv.iloc[:, -1]
 
-    loaded_model = joblib.load(props.cal_svm_model_filename)
+    loaded_model = joblib.load(props.swedish_cal_svm_model_filename)
 
     # Predicted class labels from test features
     pred_class = loaded_model.predict(x_test)
