@@ -8,7 +8,14 @@ from sklearn.calibration import  CalibratedClassifierCV
 from sklearn.pipeline import Pipeline
 from sklearn.svm import LinearSVC
 from sklearn.externals import joblib
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import SelectPercentile, chi2
+
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+
+from sklearn import preprocessing
+from sklearn import utils
 
 import numpy as np
 import nltk
@@ -23,7 +30,7 @@ import AliasBackend.utilities.IOReadWrite as IO
 
 
 def calibratedClassification():
-    fv_dataframe = pd.read_csv(props.feature_vector_filepath)
+    fv_dataframe = pd.read_csv(props.englsih_feature_vector_filepath)
 
     df = pd.DataFrame(fv_dataframe)
 
@@ -32,6 +39,13 @@ def calibratedClassification():
     # print(X)
 
     Y = abs_result_df.iloc[:, -1]
+
+    lab_enc = preprocessing.LabelEncoder()
+    Y = lab_enc.fit_transform(Y)
+
+    # Y = [int(x) for x in Y]
+
+    # print(Y)
 
     test_size = 0.2
     seed = 7
@@ -45,15 +59,19 @@ def calibratedClassification():
     # print("Preprocessing finished!")
     # percentiles = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     # #
-    percentiles = [100]
-    for p in percentiles:
-        testing_model_with_SVM(X_train, X_test, Y_train, Y_test, kfold, p)
+    # percentiles = [100]
+    # for p in percentiles:
+    #
+    testing_model_with_SVM(X_train, X_test, Y_train, Y_test, kfold)
+    testing_model_with_RandFor(X_train, X_test, Y_train, Y_test)
 
 
-def testing_model_with_SVM(x_train, x_test, y_train, y_test, kfold, percentile):
+def testing_model_with_SVM(x_train, x_test, y_train, y_test, kfold):
 
     penalty = 'l2'
     loss = 'squared_hinge'
+
+    # print(y_train)
 
     svc = LinearSVC(C=1.0, penalty=penalty, loss=loss, dual=True)
 
@@ -74,17 +92,85 @@ def testing_model_with_SVM(x_train, x_test, y_train, y_test, kfold, percentile):
 
     # best_est = clf.best_estimator_
     #Saving model
-    joblib.dump(clf, props.cal_svm_model_filename)
+    # joblib.dump(clf, props.english_cal_svm_model_filename)
 
-    print('Testing model')
+    # print('Testing model')
     # Save the classifiers predictions and create confusion matrix
 
     accuracy = clf.score(x_test, y_test)
     # print(accuracy)
     print("Accuracy: %.2f%%" % (accuracy * 100))
+    print("--------------------")
+
+def testing_model_with_RandFor(x_train, x_test, y_train, y_test):
+
+    # build a classifier
+    # clf = RandomForestClassifier(n_jobs=-1, random_state=0)
+
+    rfc = RandomForestClassifier(n_jobs=-1, max_features= 'sqrt' , oob_score = True)
+
+    # param_grid = {
+    # 'n_estimators': [200, 700],
+    # 'max_features': ['auto', 'sqrt', 'log2']
+    # }
+
+
+
+
+    # print(y_train)
+
+    # print(utils.multiclass.type_of_target(y_train))
+
+    # Number of trees in random forest
+    n_estimators = [100]
+    # Number of features to consider at every split
+    max_features = ['auto']
+    # Maximum number of levels in tree
+    # max_depth = [int(x) for x in np.linspace(10, 110, num = 11)]
+    max_depth = [None]
+    # max_depth.append(None)
+    # Minimum number of samples required to split a node
+    min_samples_split = [1]
+    # Minimum number of samples required at each leaf node
+    min_samples_leaf = [1]
+    # Method of selecting samples for training each tree
+    # bootstrap = [True, False]
+
+    # use a full grid over all parameters
+    # param_grid = {'n_estimators': n_estimators,
+    #            'max_features': max_features,
+    #            'max_depth': max_depth,
+    #            'min_samples_split': min_samples_split,
+    #            'min_samples_leaf': min_samples_leaf
+    #         }
+    # CV_rfc = GridSearchCV(estimator=rfc, param_grid=param_grid, cv= 5)
+    CV_rfc = GridSearchCV(estimator=rfc, cv= 5)
+    CV_rfc.fit(x_train, y_train)
+
+    print(CV_rfc.best_params_) #{'max_features': 'sqrt', 'n_estimators': 700}
+    best_est = CV_rfc.best_estimator_
+
+    joblib.dump(best_est, props.english_cal_rf_model_filename)
+
+    # gs = GridSearchCV(estimator = clf, param_grid=param_grid, cv = 5, n_jobs = -1, verbose = 2)
+
+    predictions = best_est.predict(x_test)
+
+    # print("Test Accuracy  :: ", predictions)
+    print("Test Accuracy  :: ", accuracy_score(y_test, predictions))
+    print(" Confusion matrix ", confusion_matrix(y_test, predictions))
+
+    # best_par = gs.best_params_
+    # best_grid = gs.best_estimator_
+
+    # predictions = gs.predict_proba(x_test)
+    # print(predictions)
+    # print("-----------")
+    # grid_accuracy = evaluate(clf, np.transpose(np.matrix(x_test), np.transpose(np.matrix(y_test))))
+    # print(grid_accuracy)
 
 def logistic_regression():
-    fv_dataframe = pd.read_csv(props.feature_vector_filepath)
+    fv_dataframe = pd.read_csv(props.englsih_feature_vector_filepath)
 
     df = pd.DataFrame(fv_dataframe)
 
@@ -330,6 +416,16 @@ def create_feature_vector_temp(text1, text2):
 
     return vector
 
+def evaluate(model, test_features, test_labels):
+    predictions = model.predict(test_features)
+    errors = abs(predictions - test_labels)
+    mape = 100 * np.mean(errors / test_labels)
+    accuracy = 100 - mape
+    print('Model Performance')
+    print('Average Error: {:0.4f} degrees.'.format(np.mean(errors)))
+    print('Accuracy = {:0.2f}%.'.format(accuracy))
+
+    return accuracy
 
 def create_english_feature_vector(text1, text2):
     row = 0
@@ -417,15 +513,15 @@ def create_english_feature_vector(text1, text2):
     return vector
 
 if __name__ == "__main__":
-    # calibratedClassification()
+    calibratedClassification()
     # testing_cali_model()
     # logistic_regression()
     # classification()
     # get_diff()
-    text1 = "abaa de..."
-    text2 = "abc dher"
-
-    create_english_feature_vector(text1, text2)
+    # text1 = "abaa de..."
+    # text2 = "abc dher"
+    #
+    # create_english_feature_vector(text1, text2)
     #
     # svm = joblib.load(props.svm_model_filename)
     # # clf = CalibratedClassifierCV(svm)
