@@ -62,7 +62,7 @@ def calibratedClassification():
     # percentiles = [100]
     # for p in percentiles:
     #
-    testing_model_with_SVM(X_train, X_test, Y_train, Y_test, kfold)
+    # testing_model_with_SVM(X_train, X_test, Y_train, Y_test, kfold)
     testing_model_with_RandFor(X_train, X_test, Y_train, Y_test)
 
 
@@ -107,13 +107,13 @@ def testing_model_with_RandFor(x_train, x_test, y_train, y_test):
     # build a classifier
     # clf = RandomForestClassifier(n_jobs=-1, random_state=0)
 
-    rfc = RandomForestClassifier(n_jobs=-1, max_features= 'sqrt' , oob_score = True)
+    rfc = RandomForestClassifier(n_estimators = 1000, n_jobs=-1, max_features= 'sqrt' , oob_score = True)
 
     # param_grid = {
     # 'n_estimators': [200, 700],
     # 'max_features': ['auto', 'sqrt', 'log2']
     # }
-
+    calibrated_rfc = CalibratedClassifierCV(rfc, method='isotonic')
 
 
 
@@ -143,18 +143,21 @@ def testing_model_with_RandFor(x_train, x_test, y_train, y_test):
     #            'min_samples_split': min_samples_split,
     #            'min_samples_leaf': min_samples_leaf
     #         }
-    # CV_rfc = GridSearchCV(estimator=rfc, param_grid=param_grid, cv= 5)
-    CV_rfc = GridSearchCV(estimator=rfc, cv= 5)
-    CV_rfc.fit(x_train, y_train)
 
-    print(CV_rfc.best_params_) #{'max_features': 'sqrt', 'n_estimators': 700}
-    best_est = CV_rfc.best_estimator_
+    # CV_rfc = GridSearchCV(estimator=calibrated_rfc, param_grid=param_grid, cv= 5)
+    # CV_rfc = GridSearchCV(estimator=calibrated_rfc, cv= 5)
+    calibrated_rfc.fit(x_train, y_train)
 
-    joblib.dump(best_est, props.english_cal_rf_model_filename)
+    # print(calibrated_rfc.best_params_) #{'max_features': 'sqrt', 'n_estimators': 700}
+    # best_est = calibrated_rfc.best_estimator_
+
+    joblib.dump(calibrated_rfc, props.english_cal_rf_model_filename)
 
     # gs = GridSearchCV(estimator = clf, param_grid=param_grid, cv = 5, n_jobs = -1, verbose = 2)
 
-    predictions = best_est.predict(x_test)
+    predictions = calibrated_rfc.predict(x_test)
+    prob = calibrated_rfc.predict_proba(x_test)
+    # print(prob)
 
     # print("Test Accuracy  :: ", predictions)
     print("Test Accuracy  :: ", accuracy_score(y_test, predictions))
