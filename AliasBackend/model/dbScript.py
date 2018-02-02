@@ -4,7 +4,7 @@ from pymongo import MongoClient
 
 import traceback
 
-client = MongoClient('dsg.foi.se', 27017)
+client = MongoClient('dsg.foi.se', 27017) #dsg.foi.se
 db = client.flashback
 user_collection = db['username']
 post_collection = db['posts']

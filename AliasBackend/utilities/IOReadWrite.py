@@ -112,10 +112,10 @@ def FV_Swedish_header():
 
         tmp_LIWC_header = sorted(os.listdir(props.LIWC_filepath))
 
-        LIWC_header = []
+        LIWC_header = [x.replace(".txt","") for x in tmp_LIWC_header]
 
-        for single_LIWC_header in tmp_LIWC_header:
-            LIWC_header.append(single_LIWC_header.replace(".txt",""))
+        # for single_LIWC_header in tmp_LIWC_header:
+        #     LIWC_header.append(single_LIWC_header.replace(".txt",""))
 
         digits_header = ['Digit_0', 'Digit_1', 'Digit_2', 'Digit_3', 'Digit_4', 'Digit_5', 'Digit_6', 'Digit_7',
                  'Digit_8', 'Digit_9']
