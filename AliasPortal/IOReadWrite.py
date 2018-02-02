@@ -197,17 +197,17 @@ def return_swe_result(x_test):
     rf = joblib.load('static/model/swe_cal_svm_finalized_model.sav')
     predicted_test_scores = rf.predict_proba(x_test)
 
-    pred_class = rf.predict(x_test)[0]
+    pred_class = float(rf.predict(x_test)[0])
     same_user_prob = str(predicted_test_scores[:, 0][0])
     diff_user_prob = str(predicted_test_scores[:, 1][0])
 
     return pred_class, same_user_prob, diff_user_prob
 
 def return_eng_result(x_test):
-    rf = joblib.load('static/model/eng_cal_svm_finalized_model.sav')
+    rf = joblib.load('static/model/eng_cal_rf_finalized_model.sav')
     predicted_test_scores = rf.predict_proba(x_test)
 
-    pred_class = rf.predict(x_test)[0]
+    pred_class = float(rf.predict(x_test)[0])
     same_user_prob = str(predicted_test_scores[:, 0][0])
     diff_user_prob = str(predicted_test_scores[:, 1][0])
 
