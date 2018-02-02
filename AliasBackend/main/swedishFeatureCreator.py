@@ -19,10 +19,10 @@ class SwedishStyloFeatures():
     def transform(self, user, posts):
         # print(user)
 
-        LIWC, word_lengths, digits, symbols, smilies, functions, user_id, features, header_feature = IO.FV_header()
+        LIWC, characters, word_lengths, digits, symbols, smilies, functions, user_id, features, header_feature = IO.FV_Swedish_header()
 
-        if not os.path.exists(props.feature_vector_filepath):
-            IO.create_file_with_header(props.feature_vector_filepath, header_feature)
+        if not os.path.exists(props.swedish_feature_vector_filepath):
+            IO.create_file_with_header(props.swedish_feature_vector_filepath, header_feature)
 
         post_A, post_B = IO.split_list(posts)
 
@@ -40,11 +40,13 @@ class SwedishStyloFeatures():
         col = 0
 
         for x in post_list:
-            # x = "länka till reportage ur massmedia. Det ska då vara sakliga reportage med integrations- och invandringspolitiska teman. @ 02:30-03:25. "
+            # x = "bäst länka till tillräcklig reportage ur massmedia. Det ska då vara sakliga reportage med integrations- och invandringspolitiska teman. @ 02:30-03:25. "
             vector = np.zeros((1, len(features)))
             x = x.lower()
             split_text = x.split()
             text_size = len(split_text)
+
+            text_length = len(x)
 
             tmp_x = str.maketrans({key: None for key in string.punctuation})
             x_wo_punct = x.translate(tmp_x)
@@ -58,56 +60,63 @@ class SwedishStyloFeatures():
             #     print(word, count)
 
             for feat in features:
-                # print(feat)
-                if col < len(LIWC):
-                    LIWC_filepath = props.LIWC_filepath + feat
-                    LIWC_words = IO.get_function_words(LIWC_filepath)
-                    count = 0
-                    try:
-                        for single_word in LIWC_words:
-                            count += sum(1 for i in re.finditer(single_word, x_wo_punct))
-                            # print(feat, single_word, count)
-                        avg_count = count / text_size
-                        # print(avg_count)
+                try:
+                    # print(feat)
+                    if col < len(LIWC):
+                        LIWC_filepath = props.LIWC_filepath + feat
+                        LIWC_words = IO.get_function_words(LIWC_filepath)
+                        count = 0
+                        try:
+                            for single_word in LIWC_words:
+                                count += sum(1 for i in re.finditer(single_word, x_wo_punct))
+                                # print(feat, single_word, count)
+                            avg_count = count / text_size
 
-                        vector[row][col] = avg_count
-                    except Exception:
-                        traceback.print_exc()
+                            vector[row][col] = avg_count
+                        except Exception:
+                            traceback.print_exc()
 
-                # Count word lengths
-                elif col < len(LIWC) + len(word_lengths):
-                    if int(feat) in word_lengths_counts.keys():
-                        vector[row][col] = word_lengths_counts.get(int(feat)) / text_size
-                    else:
-                        vector[row][col] = 0
+                    # Count swedish alphabates
+                    elif col < len(LIWC) + len(characters):
+                        vector[row][col] = " ".join(x).count(feat) / text_length
 
-                # Count digits
-                elif col < len(LIWC) + len(word_lengths) + len(digits):
-                    vector[row][col] = x_wo_punct.count(feat) / text_size
+                    # Count word lengths
+                    elif col < len(LIWC) + len(characters) + len(word_lengths):
+                        if int(feat) in word_lengths_counts.keys():
+                            vector[row][col] = word_lengths_counts.get(int(feat)) / text_size
+                        else:
+                            vector[row][col] = 0
 
-                # Count special symbols
-                elif col < len(LIWC) + len(word_lengths) + len(digits) + len(symbols):
-                    vector[row][col] = x.count(feat) / text_size
+                    # Count digits
+                    elif col < len(LIWC) + len(characters) + len(word_lengths) + len(digits):
+                        vector[row][col] = x_wo_punct.count(feat) / text_size
 
-                # Count smileys
-                elif col < len(LIWC) + len(word_lengths) + len(digits) + len(symbols) + len(smilies):
-                    vector[row][col] = x.count(feat) / text_size
-                    # print(feat, x.count(feat))
+                    # Count special symbols
+                    elif col < len(LIWC) + len(characters) + len(word_lengths) + len(digits) + len(symbols):
+                        vector[row][col] = x.count(feat) / text_size
 
-                # Count functions words
-                elif col < len(LIWC) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions):
-                    # vector[row][col] = len(re.findall(feat, " ".join(x).lower())) / text_size
-                    vector[row][col] = sum(1 for i in re.finditer(feat, x_wo_punct)) / text_size
+                    # Count smileys
+                    elif col < len(LIWC) + len(characters) + len(word_lengths) + len(digits) + len(symbols) + len(smilies):
+                        vector[row][col] = x.count(feat) / text_size
+                        # print(feat, x.count(feat))
 
-                # # Adding userId
-                elif col < len(LIWC) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions) + len(user_id):
-                    vector[row][col] = float(user)
+                    # Count functions words
+                    elif col < len(LIWC) + len(characters) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions):
+                        # vector[row][col] = len(re.findall(feat, " ".join(x).lower())) / text_size
+                        vector[row][col] = sum(1 for i in re.finditer(feat, x_wo_punct)) / text_size
+
+                    # # Adding userId
+                    elif col < len(LIWC) + len(characters) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions) + len(user_id):
+                        vector[row][col] = float(user)
 
 
-                if col == len(features) - 1:
-                    col = 0
-                    break
-                col += 1
+                    if col == len(features) - 1:
+                        col = 0
+                        break
+                    col += 1
 
-            with open(props.feature_vector_filepath, 'ab') as f_handle:
+                except Exception:
+                    traceback.print_exc()
+
+            with open(props.swedish_feature_vector_filepath, 'ab') as f_handle:
                 np.savetxt(f_handle, vector, delimiter=",")

@@ -26,10 +26,10 @@ from sklearn.ensemble import VotingClassifier
 # VotingClassifier([LinearSVC(), RandomForestClassifier() ,voting="Sfot"])
 
 def init_swedish():
+    print("Creating swedish text stylometric features ..... \n")
     users = db.get_users()
     # print(len(users)) -- 4713
     user_id = 1
-    print("Creating swedish text stylometric features ..... \n")
 
     for single_user in tqdm(users):
         # print(single_user)
