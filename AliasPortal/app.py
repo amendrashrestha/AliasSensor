@@ -20,52 +20,59 @@ def home():
 
 @app.route("/predict")
 def predict():
-    text1 = request.args.get('text1')
-    text2 = request.args.get('text2')
-
-    text_lang = IO.detect(text1)
-    # print(text_lang)
-
-    # array_length = fv_dataframe.shape[1]
-    # first_row = fv_dataframe[0][:-1]
-    # second_row = fv_dataframe[1][:-1]
-
-    # y_test = abs_fv.iloc[:, -1]
-
     try:
-        if text_lang == "en":
-            fv_dataframe = IO.create_english_feature_vector(text1, text2)
+        text1 = request.args.get('text1')
+        text2 = request.args.get('text2')
 
-            df = pd.DataFrame(fv_dataframe)
-            abs_fv = abs(df.diff()).dropna()
+        try:
+            text_lang = IO.detect(text1)
 
-            x_test = abs_fv.iloc[:,0:len(abs_fv.columns)-1]
+        except Exception:
+            return jsonify(error_msg = "Please insert text")
+        # print(text_lang)
 
-            pred_class, same_user_prob, diff_user_prob = IO.return_eng_result(x_test)
+        # array_length = fv_dataframe.shape[1]
+        # first_row = fv_dataframe[0][:-1]
+        # second_row = fv_dataframe[1][:-1]
 
-        elif text_lang == "sv":
-            fv_dataframe = IO.create_swedish_feature_vector(text1, text2)
+        # y_test = abs_fv.iloc[:, -1]
 
-            df = pd.DataFrame(fv_dataframe)
-            abs_fv = abs(df.diff()).dropna()
+        try:
+            if text_lang == "en":
+                fv_dataframe = IO.create_english_feature_vector(text1, text2)
 
-            x_test = abs_fv.iloc[:,0:len(abs_fv.columns)-1]
+                df = pd.DataFrame(fv_dataframe)
+                abs_fv = abs(df.diff()).dropna()
 
-            pred_class, same_user_prob, diff_user_prob = IO.return_swe_result(x_test)
+                x_test = abs_fv.iloc[:,0:len(abs_fv.columns)-1]
 
-        else:
-            return jsonify(error_msg = "Language problem")
+                pred_class, same_user_prob, diff_user_prob = IO.return_eng_result(x_test)
 
-        return jsonify(
-            pred_class = pred_class,
-            same_user_prob = same_user_prob,
-            diff_user_prob = diff_user_prob,
-            lang = text_lang
-        )
+            elif text_lang == "sv":
+                fv_dataframe = IO.create_swedish_feature_vector(text1, text2)
 
-    except ValueError:
-        traceback.print_exc()
-        return jsonify(error_msg = "Something is wrong !!!")
+                df = pd.DataFrame(fv_dataframe)
+                abs_fv = abs(df.diff()).dropna()
+
+                x_test = abs_fv.iloc[:,0:len(abs_fv.columns)-1]
+
+                pred_class, same_user_prob, diff_user_prob = IO.return_swe_result(x_test)
+
+            else:
+                return jsonify(error_msg = "Language problem")
+
+            return jsonify(
+                pred_class = pred_class,
+                same_user_prob = same_user_prob,
+                diff_user_prob = diff_user_prob,
+                lang = text_lang
+            )
+
+        except ValueError:
+            traceback.print_exc()
+            return jsonify(error_msg = "Something is wrong !!!")
+    except Exception:
+        return jsonify(error_msg = traceback.print_exc())
 
 
 if __name__ == '__main__':

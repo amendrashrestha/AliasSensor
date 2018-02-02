@@ -47,6 +47,8 @@ class EnglishStyloFeatures():
             split_text = x.split()
             text_size = len(split_text)
 
+            text_length = len(x)
+
             tmp_x = str.maketrans({key: None for key in string.punctuation})
             x_wo_punct = x.translate(tmp_x)
 
@@ -63,7 +65,7 @@ class EnglishStyloFeatures():
                 try:
                     # Count english alphabates
                     if col < len(characters):
-                        vector[row][col] = " ".join(x).count(feat) / text_size
+                        vector[row][col] = " ".join(x).count(feat) / text_length
 
                     # Count word lengths
                     elif col < len(characters) + len(word_lengths):
@@ -74,7 +76,7 @@ class EnglishStyloFeatures():
 
                     # Count digits
                     elif col < len(characters) + len(word_lengths) + len(digits):
-                        vector[row][col] = x_wo_punct.count(feat) / text_size
+                        vector[row][col] = x_wo_punct.count(feat) / text_length
 
                     # Count special symbols
                     elif col < len(characters) + len(word_lengths) + len(digits) + len(symbols):

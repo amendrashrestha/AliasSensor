@@ -35,6 +35,8 @@ def create_swedish_feature_vector(text1, text2):
             split_text = x.split()
             text_size = len(split_text)
 
+            text_length = len(x)
+
             tmp_x = str.maketrans({key: None for key in string.punctuation})
             x_wo_punct = x.translate(tmp_x)
 
@@ -73,7 +75,7 @@ def create_swedish_feature_vector(text1, text2):
 
                 # Count digits
                 elif col < len(LIWC) + len(word_lengths) + len(digits):
-                    vector[row][col] = x_wo_punct.count(feat) / text_size
+                    vector[row][col] = x_wo_punct.count(feat) / text_length
 
                 # Count special symbols
                 elif col < len(LIWC) + len(word_lengths) + len(digits) + len(symbols):
@@ -127,6 +129,8 @@ def create_english_feature_vector(text1, text2):
             split_text = x.split()
             text_size = len(split_text)
 
+            text_length = len(x)
+
             tmp_x = str.maketrans({key: None for key in string.punctuation})
             x_wo_punct = x.translate(tmp_x)
 
@@ -138,7 +142,7 @@ def create_english_feature_vector(text1, text2):
 
             for feat in features:
                 if col < len(characters):
-                    vector[row][col] = " ".join(x).count(feat) / text_size
+                    vector[row][col] = " ".join(x).count(feat) / text_length
 
                 # Count word lengths
                 elif col < len(characters) + len(word_lengths):
@@ -149,7 +153,7 @@ def create_english_feature_vector(text1, text2):
 
                 # Count digits
                 elif col < len(characters) + len(word_lengths) + len(digits):
-                    vector[row][col] = x_wo_punct.count(feat) / text_size
+                    vector[row][col] = x_wo_punct.count(feat) / text_length
 
                 # Count special symbols
                 elif col < len(characters) + len(word_lengths) + len(digits) + len(symbols):

@@ -30,6 +30,8 @@ body {
     min-height: 580px;
 }
 
+.border{border: 3px solid #fff;     border-radius: 5px;}
+
 .sidebar-top {
     min-height: 50px;
     /*background: #dbdfe7;*/
@@ -39,8 +41,7 @@ body {
     /*min-height: 460px;*/
     min-height: 50px;
     background-color: transparent;
-    border: 2px;
-    border-color: black;
+    /*display: none;*/
 }
 
 .sidebar-bottom {
@@ -86,6 +87,7 @@ div#loading {
     display: none;
     background: url('../images/loader.gif') center no-repeat;
     cursor: wait;
+    /*padding-top: 50px;*/
 }
 
 

@@ -2,47 +2,54 @@
 <html>
 <body>
 <head>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type=text/javascript>
-        $(function() {
+
+        function hideResultTab() {
+            $('.sidebar-middle').hide();
+        }
+
+        $(document).ready(function() {
+
+            $(document).ajaxStart(function () {
+                $("#loading").show();
+            }).ajaxStop(function () {
+                $("#loading").hide();
+                $('.sidebar-middle').show();
+            });
+
             $('button#calculate').bind('click', function() {
                 $.getJSON('/predict', {
-                    text1: $('textarea[name="text1"]').val(),
-                    text2: $('textarea[name="text2"]').val()
-                }, function(data) {
-                    console.log(data)
+                            text1: $('textarea[name="text1"]').val(),
+                            text2: $('textarea[name="text2"]').val()
+                        }, function(data) {
+                            console.log(data)
 
-                    if (data.pred_class == 1){
-                        $("#pred_result").text("Diff User");
-                    }
-                    else if(data.error_msg){
-                        $("#pred_result").text(data.error_msg);
-                    }
-                    else{
-                    $("#pred_result").text("Same User");
-                    }
-                    $("#same_user_prob").text("Same User Prob: "+ data.same_user_prob)
-                    $("#diff_user_prob").text("Diff User Prob: "+ data.diff_user_prob)
+                            if (data.pred_class == 1){
+                                $("#pred_result").text("Diff User");
+                            }
+                            else if(data.error_msg){
+                                $("#pred_result").text(data.error_msg);
+                            }
+                            else{
+                                $("#pred_result").text("Same User");
+                            }
+                            $("#same_user_prob").text("Same User Prob: "+ data.same_user_prob)
+                            $("#diff_user_prob").text("Diff User Prob: "+ data.diff_user_prob)
 
-                    if(data.lang == "sv"){
-                        $("#lang").text("Language: "+ "Swedish")
-                    }
+                            if(data.lang == "sv"){
+                                $("#lang").text("Language: "+ "Swedish")
+                            }
                             if(data.lang == "en"){
-                        $("#lang").text("Language: "+ "English")
-                    }
+                                $("#lang").text("Language: "+ "English")
+                            }
 
-                    }
+                        }
                 );
                 return false;
             });
         });
     </script>
-    <script type="text/javascript">// <![CDATA[
-        function loading(){
-            $("#loading").show();
-            $(".sidebar-middle").hide();
-        }
-// ]]></script>
 </head>
 
 {% extends "layout.html" %}
@@ -59,7 +66,7 @@
                 <label for="text2">Text 2:</label>
                 <textarea class="form-control" rows="5" name="text2" id = "text2"></textarea>
                 <p></p>
-                <button class = "btn btn-success" id="calculate" onclick="loading();">Compare</button>
+                <button class = "btn btn-success" id="calculate" onclick="hideResultTab()">Compare</button>
             </div>
         </div>
         <div class="col-sm-3">
@@ -72,7 +79,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <div id="loading"></div>
+                    <div id="loading" class="centered"></div>
                     <div class="sidebar-middle centered">
                         <p id="pred_result" class="centered"></p>
                         <p id="same_user_prob" class="centered"></p>
@@ -91,9 +98,9 @@
     <div class="row">
         <div class="col-sm-12">
             <!--<div class="browseFile btn btn-default">-->
-                <!--<label>-->
-                    <!--<input type="file" hidden>-->
-                <!--</label>-->
+            <!--<label>-->
+            <!--<input type="file" hidden>-->
+            <!--</label>-->
             <!--</div>-->
         </div>
     </div>
