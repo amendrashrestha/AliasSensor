@@ -71,48 +71,53 @@ class EnglishStyloFeatures():
             for feat in features:
                 try:
                     # Count english alphabates
-                    if col < len(characters):
-                        vector[row][col] = " ".join(x).count(feat) / text_length
+                    try:
+                        if col < len(characters):
+                            vector[row][col] = " ".join(x).count(feat) / text_length
 
-                    # Count word lengths
-                    elif col < len(characters) + len(word_lengths):
-                        if int(feat) in word_lengths_counts.keys():
-                            vector[row][col] = word_lengths_counts.get(int(feat)) / text_size
-                        else:
-                            vector[row][col] = 0
 
-                    # Count digits
-                    elif col < len(characters) + len(word_lengths) + len(digits):
-                        # print(feat + "-->" + str(x_wo_punct.count(feat)))
-                        vector[row][col] = x_wo_punct.count(feat) / text_length
+                        # Count word lengths
+                        elif col < len(characters) + len(word_lengths):
+                            if int(feat) in word_lengths_counts.keys():
+                                vector[row][col] = word_lengths_counts.get(int(feat)) / text_size
+                            else:
+                                vector[row][col] = 0
 
-                    # Count special symbols
-                    elif col < len(characters) + len(word_lengths) + len(digits) + len(symbols):
-                        vector[row][col] = x.count(feat) / text_size
+                        # Count digits
+                        elif col < len(characters) + len(word_lengths) + len(digits):
+                            # print(feat + "-->" + str(x_wo_punct.count(feat)))
+                            vector[row][col] = x_wo_punct.count(feat) / text_length
 
-                    # Count smileys
-                    elif col < len(characters) + len(word_lengths) + len(digits) + len(symbols) + len(smilies):
-                        vector[row][col] = x.count(feat) / text_size
-                        # print(feat, x.count(feat))
+                        # Count special symbols
+                        elif col < len(characters) + len(word_lengths) + len(digits) + len(symbols):
+                            vector[row][col] = x.count(feat) / text_size
 
-                    # Count functions words
-                    elif col < len(characters) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions):
-                        # vector[row][col] = len(re.findall(feat, " ".join(x).lower())) / text_size
-                        vector[row][col] = sum(1 for i in re.finditer(feat, x_wo_punct)) / text_size
+                        # Count smileys
+                        elif col < len(characters) + len(word_lengths) + len(digits) + len(symbols) + len(smilies):
+                            vector[row][col] = x.count(feat) / text_size
+                            # print(feat, x.count(feat))
 
-                    # Count POS tags
-                    elif col < len(characters) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions)\
-                            + len(pos_tags):
-                        if feat in pos.keys():
-                            # print(feat + " ---> " + str(pos.get(feat)))
-                            vector[row][col] = pos.get(feat) / text_size
-                        else:
-                            vector[row][col] = 0.0
+                        # Count functions words
+                        elif col < len(characters) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions):
+                            # vector[row][col] = len(re.findall(feat, " ".join(x).lower())) / text_size
+                            vector[row][col] = sum(1 for i in re.finditer(feat, x_wo_punct)) / text_size
 
-                    # # Adding userId
-                    elif col < len(characters) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions) +\
-                            len(pos_tags) + len(user_id):
-                        vector[row][col] = float(user)
+                        # Count POS tags
+                        elif col < len(characters) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions)\
+                                + len(pos_tags):
+                            if feat in pos.keys():
+                                # print(feat + " ---> " + str(pos.get(feat)))
+                                vector[row][col] = pos.get(feat) / text_size
+                            else:
+                                vector[row][col] = 0.0
+
+                        # # Adding userId
+                        elif col < len(characters) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions) +\
+                                len(pos_tags) + len(user_id):
+                            vector[row][col] = float(user)
+
+                    except Exception:
+                        traceback.print_exc()
 
                     if col == len(features) - 1:
                         col = 0
