@@ -14,6 +14,8 @@ import AliasPortal.IOReadWrite as IO
 
 app = Flask(__name__)
 
+#https://www.flashback.org/p63137870#p63137870
+
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -46,6 +48,7 @@ def predict():
                 fv_dataframe = IO.create_swedish_feature_vector(text1, text2)
 
                 df = pd.DataFrame(fv_dataframe)
+                # print(df)
                 abs_fv = abs(df.diff()).dropna()
 
                 x_test = abs_fv.iloc[:,0:len(abs_fv.columns)-1]

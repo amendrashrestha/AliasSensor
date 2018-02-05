@@ -11,7 +11,6 @@ from sklearn.externals import joblib
 import string
 
 import AliasPortal.IOProperties as props
-# import AliasPortal.IOReadWrite as IO
 
 def create_swedish_feature_vector(text1, text2):
     row = 0
@@ -19,7 +18,7 @@ def create_swedish_feature_vector(text1, text2):
 
     user = 1
 
-    LIWC, word_lengths, digits, symbols, smilies, functions, user_id, features, header_feature = FV_Swedish_header()
+    LIWC, characters, word_lengths, digits, symbols, smilies, functions, user_id, features, header_feature = FV_Swedish_header()
     all_text = []
     all_text.append(text1)
     all_text.append(text2)
@@ -29,7 +28,6 @@ def create_swedish_feature_vector(text1, text2):
     vector = np.zeros((len(all_text), len(features)))
 
     for x in all_text:
-
         try:
             x = x.lower()
             split_text = x.split()
@@ -50,7 +48,6 @@ def create_swedish_feature_vector(text1, text2):
 
             for feat in features:
                 # print(feat)
-
                 if col < len(LIWC):
                     LIWC_filepath = props.LIWC_filepath + feat
                     LIWC_words = get_function_words(LIWC_filepath)
@@ -66,33 +63,41 @@ def create_swedish_feature_vector(text1, text2):
                     except Exception:
                         traceback.print_exc()
 
+                # Count swedish alphabates
+                elif col < len(LIWC) + len(characters):
+                    try:
+                        vector[row][col] = " ".join(x).count(feat) / text_length
+
+                    except Exception:
+                        traceback.print_exc()
+
                 # Count word lengths
-                elif col < len(LIWC) + len(word_lengths):
+                elif col < len(LIWC) + len(characters) + len(word_lengths):
                     if int(feat) in word_lengths_counts.keys():
                         vector[row][col] = word_lengths_counts.get(int(feat)) / text_size
                     else:
                         vector[row][col] = 0
 
                 # Count digits
-                elif col < len(LIWC) + len(word_lengths) + len(digits):
+                elif col < len(LIWC) + len(characters) + len(word_lengths) + len(digits):
                     vector[row][col] = x_wo_punct.count(feat) / text_length
 
                 # Count special symbols
-                elif col < len(LIWC) + len(word_lengths) + len(digits) + len(symbols):
+                elif col < len(LIWC) + len(characters) + len(word_lengths) + len(digits) + len(symbols):
                     vector[row][col] = x.count(feat) / text_size
 
                 # Count smileys
-                elif col < len(LIWC) + len(word_lengths) + len(digits) + len(symbols) + len(smilies):
+                elif col < len(LIWC) + len(characters) + len(word_lengths) + len(digits) + len(symbols) + len(smilies):
                     vector[row][col] = x.count(feat) / text_size
                     # print(feat, x.count(feat))
 
                 # Count functions words
-                elif col < len(LIWC) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions):
+                elif col < len(LIWC) + len(characters) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions):
                     # vector[row][col] = len(re.findall(feat, " ".join(x).lower())) / text_size
                     vector[row][col] = sum(1 for i in re.finditer(feat, x_wo_punct)) / text_size
 
                 # # Adding userId
-                elif col < len(LIWC) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions) + len(user_id):
+                elif col < len(LIWC) + len(characters) + len(word_lengths) + len(digits) + len(symbols) + len(smilies) + len(functions) + len(user_id):
                     vector[row][col] = float(user)
 
 
@@ -204,15 +209,10 @@ def FV_Swedish_header():
         symbols = list('.?!,;:()"-\'')
         smileys = [':\')', ':-)', ';-)', ':p', ':d', ':x', '<3', ':)', ';)', ':@', ':*', ':j', ':$', '%)']
         functions = get_function_words(props.swe_function_word_filepath)
-        # tfidf = utilities.get_wordlist(props.tfidf_filepath)
-        # ngram_char = utilities.get_wordlist(props.ngram_char_filepath)
 
         tmp_LIWC_header = sorted(os.listdir(props.LIWC_filepath))
 
         LIWC_header = [x.replace(".txt","") for x in tmp_LIWC_header]
-
-        # for single_LIWC_header in tmp_LIWC_header:
-        #     LIWC_header.append(single_LIWC_header.replace(".txt",""))
 
         digits_header = ['Digit_0', 'Digit_1', 'Digit_2', 'Digit_3', 'Digit_4', 'Digit_5', 'Digit_6', 'Digit_7',
                  'Digit_8', 'Digit_9']
@@ -220,13 +220,6 @@ def FV_Swedish_header():
                   'right_bracket', 'double_inverted_comma', 'hypen', 'single_inverted_comma']
         smilies_header = ['smily_1', 'smily_2', 'smily_3', 'smily_4', 'smily_5', 'smily_6', 'smily_7', 'smily_8',
                   'smily_9', 'smily_10', 'smily_11', 'smily_12', 'smily_13', 'smily_14']
-        # ngaram_char_header = utilities.create_ngram_header(ngram_char)
-
-        # header_feature = LIWC_header + lengths + word_lengths + digits_header + symbols_header + smilies_header + \
-        # functions + tfidf + ngaram_char_header + user_id
-
-        # features = LIWC_header + lengths + word_lengths + digits + symbols + smileys + functions + tfidf + \
-        # ngram_char + user_id
 
         header_feature = LIWC_header + characters + word_lengths + digits_header + symbols_header + smilies_header + \
                  functions + user_id
@@ -252,29 +245,12 @@ def FV_English_header():
 
     pos_tags = pos_header()
 
-    # tfidf = utilities.get_wordlist(props.tfidf_filepath)
-    # ngram_char = utilities.get_wordlist(props.ngram_char_filepath)
-
-    # tmp_LIWC_header = sorted(os.listdir(props.LIWC_filepath))
-    #
-    # LIWC_header = []
-
-    # for single_LIWC_header in tmp_LIWC_header:
-    #     LIWC_header.append(single_LIWC_header.replace(".txt",""))
-
     digits_header = ['Digit_0', 'Digit_1', 'Digit_2', 'Digit_3', 'Digit_4', 'Digit_5', 'Digit_6', 'Digit_7',
              'Digit_8', 'Digit_9']
     symbols_header = ['dot', 'question_mark', 'exclamation', 'comma', 'semi_colon', 'colon', 'left_bracket',
               'right_bracket', 'double_inverted_comma', 'hypen', 'single_inverted_comma']
     smilies_header = ['smily_1', 'smily_2', 'smily_3', 'smily_4', 'smily_5', 'smily_6', 'smily_7', 'smily_8',
               'smily_9', 'smily_10', 'smily_11', 'smily_12', 'smily_13', 'smily_14']
-    # ngaram_char_header = utilities.create_ngram_header(ngram_char)
-
-    # header_feature = LIWC_header + lengths + word_lengths + digits_header + symbols_header + smilies_header + \
-    # functions + tfidf + ngaram_char_header + user_id
-
-    # features = LIWC_header + lengths + word_lengths + digits + symbols + smileys + functions + tfidf + \
-    # ngram_char + user_id
 
     header_feature = characters + word_lengths + digits_header + symbols_header + smilies_header + \
              functions + pos_tags + user_id

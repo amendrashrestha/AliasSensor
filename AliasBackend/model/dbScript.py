@@ -5,7 +5,7 @@ from pymongo import MongoClient
 import traceback
 
 client = MongoClient('localhost', 27017) #dsg.foi.se
-db = client.flashback
+db = client.reddit
 user_collection = db['username']
 post_collection = db['posts']
 
@@ -30,7 +30,7 @@ def get_users():
 def get_user_post(user):
     try:
         # print(user)
-        post_query = post_collection.find({"user": user}, {"text":1})
+        post_query = post_collection.find({"username": user}, {"text":1})
         posts_list = []
 
         for post in post_query:
