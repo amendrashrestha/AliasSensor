@@ -1,0 +1,151 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  line-height: 60px; /* Vertically center the text there */
+  background-color: #F6F6F6;
+}
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+body > .container {
+  padding: 60px 15px 0;
+}
+
+code {
+  font-size: 80%;
+  color: black;
+  background-color: #F6F6F6;
+  /*box-shadow: 1px 1px 5px LightGrey;*/
+}
+
+.code_2 {
+  font-size: 80%;
+  color: black;
+  background-color: White;
+  box-shadow: 1px 1px 5px LightGrey;
+}
+
+.custom {
+    height: 100px;
+    width: 100px;
+    border-radius: 0;
+}
+
+.custom_bg {
+    padding: 1rem 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    background-color: #FFF;
+    box-shadow: 1px 1px 5px LightGrey;
+}
+
+.custom_header {
+    /*background-color: #292b2c; */
+    background-color: #54606E;
+    font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size: 16px;
+}
+
+.custom_top{
+    margin-top: 1rem;
+    margin-bottom: 10rem;
+}
+
+.custom_box {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    background-color: #F3F3F3;
+    box-shadow: 1px 1px 5px LightGrey;
+}
+
+.custom_menu_font{
+    font-family: "Lucida Console", Monaco, monospace;
+}
+
+.custom_big_top {
+    margin-top: 2rem;
+    margin-bottom: 10rem;
+}
+
+.radiobuttons {
+    font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    padding: 3rem;
+    width:15rem;
+    height:10rem;
+    font-size: 100%;
+    margin-top: 0rem;
+    margin-bottom: 1rem;
+    background-color: White;
+    box-shadow: 1px 1px 5px LightGrey;
+}
+
+.radiomessage {
+    font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    padding: 1rem 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    background-color: #FFF;
+    box-shadow: 1px 1px 5px LightGrey;
+}
+
+.start {
+    font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    margin-top: 1rem;
+    box-shadow: 1px 1px 5px LightGrey;
+}
+
+.custom_box_yes {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    background-color: #adebb7;
+    box-shadow: 1px 1px 5px LightGrey;
+}
+
+.custom_box_no {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    background-color: #fb9f9d;
+    box-shadow: 1px 1px 5px LightGrey;
+}
+
+.custom_box_lightblue {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    background-color: lightblue;
+    box-shadow: 1px 1px 5px LightGrey;
+}
+
+.custom_box_lightpink {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    background-color: lightpink;
+    box-shadow: 1px 1px 5px LightGrey;
+}
+
+.custom_box_lightyellow {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    background-color: lightyellow;
+    box-shadow: 1px 1px 5px LightGrey;
+}
+
+.custom_box_orange {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    background-color: orange;
+    box-shadow: 1px 1px 5px LightGrey;
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<body>
+<head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type=text/javascript>
+        function hideResultTab() {
+            $('.sidebar-middle').hide();
+        }
+    </script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/getPredScore.js') }}"></script>
+</head>
+
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+            <div class="form-group">
+                <label for="text1">Text 1:</label>
+                <textarea class="form-control" rows="5" name="text1" id = "text1"></textarea>
+                <p></p>
+                <label for="text2">Text 2:</label>
+                <textarea class="form-control" rows="5" name="text2" id = "text2"></textarea>
+                <p></p>
+                <button class = "btn btn-success" id="calculate" onclick="hideResultTab()">Compare</button>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="sidebar-top centered">
+                        <img src="/static/images/AliasSensorLogo.png"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="loading" class="centered"></div>
+                    <div class="sidebar-middle centered">
+                        <p id="pred_result" class="centered"></p>
+                        <p id="same_user_prob" class="centered"></p>
+                        <p id="diff_user_prob" class="centered"></p>
+                        <p id="lang" class="centered"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 hidden-xs">
+                    <div class="sidebar-bottom"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <!--<div class="browseFile btn btn-default">-->
+            <!--<label>-->
+            <!--<input type="file" hidden>-->
+            <!--</label>-->
+            <!--</div>-->
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+</body>
+</html>
+
