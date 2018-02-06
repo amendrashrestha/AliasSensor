@@ -296,8 +296,8 @@ def return_swe_result(x_test):
     predicted_test_scores = rf.predict_proba(x_test)
 
     # pred_class = float(rf.predict(x_test)[0])
-    same_user_prob = str(predicted_test_scores[:, 0][0])
-    diff_user_prob = str(predicted_test_scores[:, 1][0])
+    same_user_prob = str(round(predicted_test_scores[:, 0][0], 4))
+    diff_user_prob = str(round(predicted_test_scores[:, 1][0], 4))
 
     return same_user_prob, diff_user_prob
 
@@ -307,7 +307,7 @@ def return_eng_result(x_test):
     predicted_test_scores = rf.predict_proba(x_test)
 
     # pred_class = float(rf.predict(x_test)[0])
-    same_user_prob = str(predicted_test_scores[:, 0][0])
-    diff_user_prob = str(predicted_test_scores[:, 1][0])
+    same_user_prob = str(round(predicted_test_scores[:, 0][0], 4))
+    diff_user_prob = str(round(predicted_test_scores[:, 1][0], 4))
 
     return same_user_prob, diff_user_prob

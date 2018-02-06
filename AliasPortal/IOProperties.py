@@ -15,6 +15,6 @@ englsih_feature_vector_filepath = os.path.expanduser('~') + "/Desktop/AliasMatch
 swedish_cal_svm_model_filename = os.path.expanduser('~') + '/repo/AliasSensor/AliasBackend/models/swe_cal_svm_finalized_model.sav'
 english_cal_svm_model_filename = os.path.expanduser('~') + '/repo/AliasSensor/AliasBackend/models/eng_cal_svm_finalized_model.sav'
 
-english_cal_rf_model_filename = os.path.expanduser('~') + '/Desktop/AliasMatching/model/eng_cal_rf_finalized_model_reddit.sav'
+english_cal_rf_model_filename = os.path.expanduser('~') + '/Desktop/AliasMatching/model/eng_cal_rf_finalized_model.sav'
 swedish_cal_rf_model_filename = os.path.expanduser('~') + '/Desktop/AliasMatching/model/swe_cal_rf_finalized_model.sav'
 
