@@ -4,52 +4,11 @@
 <head>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type=text/javascript>
-
         function hideResultTab() {
             $('.sidebar-middle').hide();
         }
-
-        $(document).ready(function() {
-
-            $(document).ajaxStart(function () {
-                $("#loading").show();
-            }).ajaxStop(function () {
-                $("#loading").hide();
-                $('.sidebar-middle').show();
-            });
-
-            $('button#calculate').bind('click', function() {
-                $.getJSON('/predict', {
-                            text1: $('textarea[name="text1"]').val(),
-                            text2: $('textarea[name="text2"]').val()
-                        }, function(data) {
-                            console.log(data)
-
-                            if (data.pred_class == 1){
-                                $("#pred_result").text("Diff User");
-                            }
-                            else if(data.error_msg){
-                                $("#pred_result").text(data.error_msg);
-                            }
-                            else{
-                                $("#pred_result").text("Same User");
-                            }
-                            $("#same_user_prob").text("Same User Prob: "+ data.same_user_prob)
-                            $("#diff_user_prob").text("Diff User Prob: "+ data.diff_user_prob)
-
-                            if(data.lang == "sv"){
-                                $("#lang").text("Language: "+ "Swedish")
-                            }
-                            if(data.lang == "en"){
-                                $("#lang").text("Language: "+ "English")
-                            }
-
-                        }
-                );
-                return false;
-            });
-        });
     </script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/getPredScore.js') }}"></script>
 </head>
 
 {% extends "layout.html" %}
@@ -102,13 +61,6 @@
             <!--<input type="file" hidden>-->
             <!--</label>-->
             <!--</div>-->
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="footer">
-                <p class="text-right"> &copy; Copyright 2018 Alias Sensor</p>
-            </div>
         </div>
     </div>
 </div>

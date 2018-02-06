@@ -30,7 +30,7 @@ def get_users():
 def get_user_post(user):
     try:
         # print(user)
-        post_query = post_collection.find({"username": user}, {"text":1, '_id':0})
+        post_query = post_collection.find({"username": user}, {"text":1})
         posts_list = []
 
         for post in post_query:

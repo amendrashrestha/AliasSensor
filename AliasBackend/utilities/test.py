@@ -30,7 +30,7 @@ import AliasBackend.utilities.IOReadWrite as IO
 
 
 def calibratedClassification():
-    fv_dataframe = pd.read_csv(props.englsih_feature_vector_filepath)
+    fv_dataframe = pd.read_csv(props.swedish_feature_vector_filepath)
 
     df = pd.DataFrame(fv_dataframe)
 
@@ -107,7 +107,7 @@ def testing_model_with_RandFor(x_train, x_test, y_train, y_test):
     # build a classifier
     # clf = RandomForestClassifier(n_jobs=-1, random_state=0)
 
-    rfc = RandomForestClassifier(n_estimators = 1000, n_jobs=-1, max_features= 'sqrt' , oob_score = True)
+    rfc = RandomForestClassifier(n_estimators = 300, n_jobs=-1, max_features= 'sqrt' , oob_score = True)
 
     # param_grid = {
     # 'n_estimators': [200, 700],
@@ -151,12 +151,12 @@ def testing_model_with_RandFor(x_train, x_test, y_train, y_test):
     # print(calibrated_rfc.best_params_) #{'max_features': 'sqrt', 'n_estimators': 700}
     # best_est = calibrated_rfc.best_estimator_
 
-    joblib.dump(calibrated_rfc, props.english_cal_rf_model_filename)
+    joblib.dump(calibrated_rfc, props.swedish_cal_rf_model_filename)
 
     # gs = GridSearchCV(estimator = clf, param_grid=param_grid, cv = 5, n_jobs = -1, verbose = 2)
 
     predictions = calibrated_rfc.predict(x_test)
-    prob = calibrated_rfc.predict_proba(x_test)
+    #prob = calibrated_rfc.predict_proba(x_test)
     # print(prob)
 
     # print("Test Accuracy  :: ", predictions)

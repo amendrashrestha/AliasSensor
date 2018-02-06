@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request, jsonify
 
-
 from sklearn.metrics.pairwise import cosine_similarity
 
 import pandas as pd
 import traceback
+
+from langdetect import detect
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -12,6 +13,8 @@ warnings.filterwarnings("ignore")
 import AliasPortal.IOReadWrite as IO
 
 app = Flask(__name__)
+
+#https://www.flashback.org/p63137870#p63137870
 
 @app.route('/')
 def home():
@@ -25,17 +28,10 @@ def predict():
         text2 = request.args.get('text2')
 
         try:
-            text_lang = IO.detect(text1)
+            text_lang = detect(text1)
 
         except Exception:
             return jsonify(error_msg = "Please insert text")
-        # print(text_lang)
-
-        # array_length = fv_dataframe.shape[1]
-        # first_row = fv_dataframe[0][:-1]
-        # second_row = fv_dataframe[1][:-1]
-
-        # y_test = abs_fv.iloc[:, -1]
 
         try:
             if text_lang == "en":
@@ -46,23 +42,24 @@ def predict():
 
                 x_test = abs_fv.iloc[:,0:len(abs_fv.columns)-1]
 
-                pred_class, same_user_prob, diff_user_prob = IO.return_eng_result(x_test)
+                same_user_prob, diff_user_prob = IO.return_eng_result(x_test)
 
             elif text_lang == "sv":
                 fv_dataframe = IO.create_swedish_feature_vector(text1, text2)
 
                 df = pd.DataFrame(fv_dataframe)
+                # print(df)
                 abs_fv = abs(df.diff()).dropna()
 
                 x_test = abs_fv.iloc[:,0:len(abs_fv.columns)-1]
 
-                pred_class, same_user_prob, diff_user_prob = IO.return_swe_result(x_test)
+                same_user_prob, diff_user_prob = IO.return_swe_result(x_test)
 
             else:
                 return jsonify(error_msg = "Language problem")
 
             return jsonify(
-                pred_class = pred_class,
+                # pred_class = pred_class,
                 same_user_prob = same_user_prob,
                 diff_user_prob = diff_user_prob,
                 lang = text_lang
@@ -71,6 +68,7 @@ def predict():
         except ValueError:
             traceback.print_exc()
             return jsonify(error_msg = "Something is wrong !!!")
+
     except Exception:
         return jsonify(error_msg = traceback.print_exc())
 

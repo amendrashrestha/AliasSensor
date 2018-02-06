@@ -89,7 +89,7 @@ class SwedishStyloFeatures():
 
                     # Count digits
                     elif col < len(LIWC) + len(characters) + len(word_lengths) + len(digits):
-                        vector[row][col] = x_wo_punct.count(feat) / text_size
+                        vector[row][col] = x_wo_punct.count(feat) / text_length
 
                     # Count special symbols
                     elif col < len(LIWC) + len(characters) + len(word_lengths) + len(digits) + len(symbols):
