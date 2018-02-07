@@ -10,7 +10,7 @@ mongo_object = MongoClient('localhost', 27017)
 
 import AliasBackend.utilities.IOReadWrite as IO
 
-archive_filepath = os.path.expanduser('~') + "/Downloads/Data/Reddit/"
+archive_filepath = os.path.expanduser('~') + "/Downloads/Data/Reddit" + "/*/*.bz2"
 
 file_path = IO.get_list_files(archive_filepath)
 

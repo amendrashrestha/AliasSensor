@@ -20,7 +20,6 @@ import AliasBackend.model.dbScript as db
 import AliasBackend.utilities.IOProperties as prop
 from AliasBackend.main.swedishFeatureCreator import SwedishStyloFeatures
 from AliasBackend.main.englishFeatureCreator import EnglishStyloFeatures
-from AliasBackend.utilities.test_evaluator import evaluator
 from sklearn.ensemble import VotingClassifier
 
 # VotingClassifier([LinearSVC(), RandomForestClassifier() ,voting="Sfot"])

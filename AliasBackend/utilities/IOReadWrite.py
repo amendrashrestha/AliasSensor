@@ -143,4 +143,4 @@ def FV_Swedish_header():
     return tmp_LIWC_header, characters, word_lengths, digits, symbols_header, smilies_header, functions, user_id, features, header_feature
 
 def get_list_files(dir_path):
-    return glob.glob(dir_path+ "/*/*.bz2")
+    return glob.glob(dir_path)

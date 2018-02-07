@@ -5,6 +5,7 @@ import re
 import nltk
 import numpy as np
 import os
+import glob
 
 from sklearn.externals import joblib
 
@@ -291,23 +292,39 @@ def get_function_words(filepath):
     return functions
 
 def return_swe_result(x_test):
-    rf = joblib.load('static/model/swe_cal_rf_finalized_model.sav')
-    # rf = joblib.load(props.swedish_cal_rf_model_filename)
+    # rf = joblib.load('static/model/swe_cal_rf_finalized_model.sav')
+    rf = joblib.load(props.swedish_cal_rf_model_filename)
     predicted_test_scores = rf.predict_proba(x_test)
 
     # pred_class = float(rf.predict(x_test)[0])
-    same_user_prob = str(round(predicted_test_scores[:, 0][0], 4))
-    diff_user_prob = str(round(predicted_test_scores[:, 1][0], 4))
+    same_user_prob = str(round(predicted_test_scores[:, 0][0], 4) * 100)
+    diff_user_prob = str(round(predicted_test_scores[:, 1][0], 4) * 100)
 
     return same_user_prob, diff_user_prob
 
 def return_eng_result(x_test):
-    rf = joblib.load('static/model/eng_cal_rf_finalized_model.sav')
-    # rf = joblib.load(props.english_cal_rf_model_filename)
+    # rf = joblib.load('static/model/eng_cal_rf_finalized_model.sav')
+    rf = joblib.load(props.english_cal_rf_model_filename)
     predicted_test_scores = rf.predict_proba(x_test)
 
     # pred_class = float(rf.predict(x_test)[0])
-    same_user_prob = str(round(predicted_test_scores[:, 0][0], 4))
-    diff_user_prob = str(round(predicted_test_scores[:, 1][0], 4))
+    same_user_prob = str(round(predicted_test_scores[:, 0][0], 4) * 100)
+    diff_user_prob = str(round(predicted_test_scores[:, 1][0], 4) * 100)
 
     return same_user_prob, diff_user_prob
+
+def get_list_files(dir_path):
+    return glob.glob(dir_path)
+
+def create_file_with_header(filepath, features):
+    with open(filepath, 'a') as outtsv:
+        features = '\t'.join(features)
+        outtsv.write(features)
+        outtsv.write("\n")
+
+def write_in_file(filepath, features):
+    with open(filepath, "a", encoding='utf-8') as text_file:
+        for item in features:
+            text_file.write(str(item))
+            text_file.write("\t")
+        text_file.write("\n")

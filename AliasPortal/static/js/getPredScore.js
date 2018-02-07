@@ -20,11 +20,11 @@ $(document).ready(function() {
 //                if (data.pred_class == 1){
 //                    $("#pred_result").text("Diff User");
 //                }
-                if(data.same_user_prob <= 0.5){
+                if(data.same_user_prob <= 50){
                     $('#pred_result').css('color', 'blue');
                     $("#pred_result").text("Diff User");
                 }
-                else if(data.same_user_prob > 0.5){
+                else if(data.same_user_prob > 50){
                     $('#pred_result').css('color', 'green');
                     $("#pred_result").text("Same User");
                 }
@@ -36,14 +36,14 @@ $(document).ready(function() {
                     $("#pred_result").text("Diff User");
                 }
 
-                var same_per = data.same_user_prob * 100
-                var diff_per = data.diff_user_prob * 100
+//                var same_per = data.same_user_prob * 100
+//                var diff_per = data.diff_user_prob * 100
 
-                // console.log(same_per)
-                // console.log(diff_per)
+//                console.log(same_per)
+//                console.log(diff_per)
 
-                $("#same_user_prob").text("Same User Prob: "+ same_per + "%")
-                $("#diff_user_prob").text("Diff User Prob: "+ diff_per + "%")
+                $("#same_user_prob").text("Same User Prob: "+ data.same_user_prob + "%")
+                $("#diff_user_prob").text("Diff User Prob: "+ data.diff_user_prob + "%")
 
                 if(data.lang == "sv"){
                     $("#lang").text("Language: "+ "Swedish")

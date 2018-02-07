@@ -9,10 +9,10 @@ from AliasBackend.main.controller import classification, init_swedish, init_engl
 from AliasBackend.main.classifiers import calibratedClassification
 
 def main():
-    init_english()
+    # init_english()
     # init_swedish()
     # classification()
-    # calibratedClassification()
+    calibratedClassification()
 
 if __name__ == "__main__":
     main()
