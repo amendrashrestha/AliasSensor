@@ -4,10 +4,10 @@ from pymongo import MongoClient
 
 import traceback
 
-client = MongoClient('localhost', 27017) #dsg.foi.se
-db = client.reddit
-user_collection = db['username']
-post_collection = db['posts']
+client = MongoClient('dsg.foi.se', 27017) #dsg.foi.se
+db = client.flashback
+user_collection = db['username_2015']
+post_collection = db['post_gt_2015']
 
 collection = db['posts']
 

@@ -1,6 +1,7 @@
 __author__ = 'amendrashrestha'
 import os
 
+LIWC_New_filepath = os.environ['HOME'] + '/repo/AliasSensor/AliasBackend/dictionaries/LIWC_New/'
 LIWC_filepath = os.environ['HOME'] + '/repo/AliasSensor/AliasBackend/dictionaries/LIWC/'
 swe_function_word_filepath = os.environ['HOME'] + '/repo/AliasSensor/AliasBackend/dictionaries/function_words/swe_funct.txt'
 eng_function_word_filepath = os.environ['HOME'] + '/repo/AliasSensor/AliasBackend/dictionaries/function_words/eng_funct.txt'

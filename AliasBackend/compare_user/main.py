@@ -3,12 +3,16 @@ __author__ = 'amendrashrestha'
 import os
 import traceback
 import json
+import warnings
+import tqdm
+
+warnings.filterwarnings("ignore")
 
 import pandas as pd
 
 import AliasPortal.IOReadWrite as IO
 
-user_A_json_filepath = os.environ['HOME'] + "/Desktop/Files/User_A/*.json"
+user_A_json_filepath = os.environ['HOME'] + "/Desktop/File/User_A/*.json"
 user_B_json_filepath = os.environ['HOME'] + "/Desktop/Files/User_B/*.json"
 
 user_prob_filepath = os.environ['HOME'] + "/Desktop/Files/user_prob.tsv"
@@ -26,14 +30,18 @@ def get_user_text():
 
     for x in user_A_json_files:
         try:
+            # x = "/home/amendra/Desktop/Files/User_A/A_1.json"
             with open(x) as json_data:
                 data = json.load(json_data)
+                # print(data)
 
                 for single_data in data:
-                    username = single_data["username"]
+                    tmp_user_A_info = {}
+                    username = single_data["name"]
                     text = single_data["text"]
 
                     user_A_info[username] = text
+                    tmp_user_A_info[username] = text
 
                     # user_A_info = merge_text(user_A_info)
 
@@ -44,9 +52,10 @@ def get_user_text():
         try:
             with open(y) as json_data:
                 data = json.load(json_data)
+                # print(data)
 
                 for single_data in data:
-                    username = single_data["username"]
+                    username = single_data["name"]
                     text = single_data["text"]
                     user_B_info[username] = text
 

@@ -110,7 +110,7 @@ def FV_Swedish_header():
         # tfidf = utilities.get_wordlist(props.tfidf_filepath)
         # ngram_char = utilities.get_wordlist(props.ngram_char_filepath)
 
-        tmp_LIWC_header = sorted(os.listdir(props.LIWC_filepath))
+        tmp_LIWC_header = sorted(os.listdir(props.LIWC_New_filepath))
 
         LIWC_header = [x.replace(".txt","") for x in tmp_LIWC_header]
 

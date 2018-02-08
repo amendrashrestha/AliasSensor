@@ -6,6 +6,7 @@ import nltk
 import numpy as np
 import os
 import glob
+import tqdm
 
 from sklearn.externals import joblib
 
@@ -328,3 +329,7 @@ def write_in_file(filepath, features):
             text_file.write(str(item))
             text_file.write("\t")
         text_file.write("\n")
+
+def read_text_file(filepath):
+    with open(filepath, 'r') as content:
+        return content.readlines()
