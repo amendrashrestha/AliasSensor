@@ -18,7 +18,8 @@ import AliasBackend.utilities.IOProperties as props
 
 def calibratedClassification():
     try:
-        fv_dataframe = pd.read_csv(props.englsih_feature_vector_filepath)
+        print(props.swedish_feature_vector_filepath)
+        fv_dataframe = pd.read_csv(props.swedish_feature_vector_filepath)
 
         df = pd.DataFrame(fv_dataframe)
         # print(df.shape)
@@ -75,7 +76,7 @@ def testing_model_with_RandFor(x_train, x_test, y_train, y_test):
 
     calibrated_rfc.fit(x_train, y_train)
 
-    joblib.dump(calibrated_rfc, props.english_cal_rf_model_filename)
+    joblib.dump(calibrated_rfc, props.swedish_cal_rf_model_filename)
 
     predictions = calibrated_rfc.predict(x_test)
 

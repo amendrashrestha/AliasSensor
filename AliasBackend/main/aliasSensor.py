@@ -10,9 +10,9 @@ from AliasBackend.main.classifiers import calibratedClassification
 
 def main():
     # init_english()
-    init_swedish()
+    # init_swedish()
     # classification()
-    # calibratedClassification()
+    calibratedClassification()
 
 if __name__ == "__main__":
     main()
