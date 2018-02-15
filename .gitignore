@@ -3,6 +3,7 @@ AliasBackend/models/
 .DS_Store
 .idea
 .xml
+.pyc
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
