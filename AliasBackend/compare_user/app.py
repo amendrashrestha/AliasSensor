@@ -5,11 +5,17 @@ import traceback
 import warnings
 from tqdm import tqdm
 
+import sys
+sys.path.append('/path/to/ptdraft/')
+
 warnings.filterwarnings("ignore")
 
 import pandas as pd
 
-import AliasPortal.IOReadWrite as IO
+#import AliasPortal.IOReadWrite as IO
+#import AliasBackend.compare_user.dbScript as db
+
+import ..IOReadWrite as IO
 import AliasBackend.compare_user.dbScript as db
 
 user_A_json_filepath = os.path.join(os.environ['HOME'] , "Desktop/File/tomazin")
@@ -21,7 +27,7 @@ def init():
 
     for single_col in collection_name[1:]:
         col_name, user_A_info, user_B_info = get_user_text(single_col)
-        compare_user(col_name, user_A_info, user_B_info)
+        #compare_user(col_name, user_A_info, user_B_info)
 
 def get_user_text(collection_name):
     print(collection_name)
