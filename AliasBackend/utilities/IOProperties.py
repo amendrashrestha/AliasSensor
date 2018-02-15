@@ -1,5 +1,6 @@
 __author__ = 'amendrashrestha'
 import os
+import sys
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
@@ -23,5 +24,9 @@ english_cal_svm_model_filename = os.path.expanduser('~') + '/repo/AliasSensor/Al
 
 english_cal_rf_model_filename = os.path.join(os.environ['HOME'],'Desktop/AliasMatching/model/eng_cal_rf_finalized_model.sav')
 swedish_cal_rf_model_filename = os.path.join(os.environ['HOME'], 'Desktop/AliasMatching/model/swe_cal_rf_finalized_model.sav')
+
+util_folder = sys.path.append(os.path.join(os.environ['HOME'] , 'repo/AliasSensor/AliasBackend/utilities/'))
+io_readwrite_folder = sys.path.append(os.path.join(os.environ['HOME'] , 'repo/AliasSensor/AliasBackend/model/'))
+# properties_folder = sys.path.append(os.path.join(os.environ['HOME'] , 'repo/AliasSensor/AliasBackend/model/'))
 
 

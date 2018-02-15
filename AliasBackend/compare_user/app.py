@@ -6,17 +6,16 @@ import warnings
 from tqdm import tqdm
 
 import sys
-sys.path.append('/path/to/ptdraft/')
 
 warnings.filterwarnings("ignore")
 
+sys.path.append(os.path.join(os.environ['HOME'] , 'repo/AliasSensor/AliasBackend/utilities/'))
+sys.path.append(os.path.join(os.environ['HOME'] , 'repo/AliasSensor/AliasBackend/model/'))
+
 import pandas as pd
 
-#import AliasPortal.IOReadWrite as IO
-#import AliasBackend.compare_user.dbScript as db
-
-import ..IOReadWrite as IO
-import AliasBackend.compare_user.dbScript as db
+import IOReadWrite as IO
+import dbScript as db
 
 user_A_json_filepath = os.path.join(os.environ['HOME'] , "Desktop/File/tomazin")
 
