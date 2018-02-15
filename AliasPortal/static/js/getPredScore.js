@@ -20,11 +20,11 @@ $(document).ready(function() {
 //                if (data.pred_class == 1){
 //                    $("#pred_result").text("Diff User");
 //                }
-                if(data.same_user_prob <= 50){
+                if(data.same_user_prob <= 85){
                     $('#pred_result').css('color', 'blue');
                     $("#pred_result").text("Olika författare");
                 }
-                else if(data.same_user_prob > 50){
+                else if(data.same_user_prob > 85){
                     $('#pred_result').css('color', 'green');
                     $("#pred_result").text("Samma författare");
                 }
@@ -33,14 +33,8 @@ $(document).ready(function() {
                     $("#pred_result").text(data.error_msg);
                 }
                 else{
-                    $("#pred_result").text("Samma författare");
+                    $("#pred_result").text("Vet ej");
                 }
-
-//                var same_per = data.same_user_prob * 100
-//                var diff_per = data.diff_user_prob * 100
-
-//                console.log(same_per)
-//                console.log(diff_per)
 
                 $("#same_user_prob").text("Samma författare: "+ data.same_user_prob + "%")
                 $("#diff_user_prob").text("Olika författare: "+ data.diff_user_prob + "%")

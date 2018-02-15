@@ -4,17 +4,19 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 import pandas as pd
 import traceback
+import sys
+import os
 
 from langdetect import detect
 
 import warnings
 warnings.filterwarnings("ignore")
 
-import AliasPortal.IOReadWrite as IO
+sys.path.append(os.path.join(os.environ['HOME'] , 'repo/AliasSensor/AliasPortal/'))
+
+import IOReadWrite as IO
 
 app = Flask(__name__)
-
-#https://www.flashback.org/p63137870#p63137870
 
 @app.route('/')
 def home():
@@ -72,7 +74,7 @@ def predict():
         )
 
     except Exception:
-        # traceback.print_exc()
+        traceback.print_exc()
         return jsonify(error_msg = "Ett fel har uppstått")
 
 

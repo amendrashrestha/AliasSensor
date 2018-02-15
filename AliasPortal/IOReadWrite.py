@@ -7,12 +7,15 @@ import numpy as np
 import os
 import glob
 import tqdm
+import sys
 
 from sklearn.externals import joblib
 
 import string
 
-import AliasPortal.IOProperties as props
+sys.path.append(os.path.join(os.environ['HOME'] , 'repo/AliasSensor/AliasPortal/'))
+
+import IOProperties as props
 
 def create_swedish_feature_vector(text1, text2):
     row = 0
@@ -293,24 +296,24 @@ def get_function_words(filepath):
     return functions
 
 def return_swe_result(x_test):
-    # rf = joblib.load('static/model/swe_cal_rf_finalized_model.sav')
-    rf = joblib.load(props.swedish_cal_rf_model_filename)
+    rf = joblib.load('static/model/swe_cal_rf_finalized_model.sav')
+    # rf = joblib.load(props.swedish_cal_rf_model_filename)
     predicted_test_scores = rf.predict_proba(x_test)
 
     # pred_class = float(rf.predict(x_test)[0])
-    same_user_prob = str(round(predicted_test_scores[:, 0][0], 4) * 100)
-    diff_user_prob = str(round(predicted_test_scores[:, 1][0], 4) * 100)
+    same_user_prob = round(predicted_test_scores[:, 0][0] * 100, 2)
+    diff_user_prob = round(predicted_test_scores[:, 1][0] * 100, 2)
 
     return same_user_prob, diff_user_prob
 
 def return_eng_result(x_test):
-    # rf = joblib.load('static/model/eng_cal_rf_finalized_model.sav')
-    rf = joblib.load(props.english_cal_rf_model_filename)
+    rf = joblib.load('static/model/eng_cal_rf_finalized_model.sav')
+    # rf = joblib.load(props.english_cal_rf_model_filename)
     predicted_test_scores = rf.predict_proba(x_test)
 
     # pred_class = float(rf.predict(x_test)[0])
-    same_user_prob = str(round(predicted_test_scores[:, 0][0], 4) * 100)
-    diff_user_prob = str(round(predicted_test_scores[:, 1][0], 4) * 100)
+    same_user_prob = round(predicted_test_scores[:, 0][0] * 100, 2)
+    diff_user_prob = round(predicted_test_scores[:, 1][0] * 100, 2)
 
     return same_user_prob, diff_user_prob
 
