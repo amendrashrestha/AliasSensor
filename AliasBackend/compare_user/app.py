@@ -17,20 +17,20 @@ user_A_json_filepath = os.path.join(os.environ['HOME'] , "Desktop/File/tomazin")
 user_prob_filepath = os.path.join(os.environ['HOME'] , "Desktop/File/Result/")
 
 def init():
-    col_name, user_A_info, user_B_info = get_user_text()
-    compare_user(col_name, user_A_info, user_B_info)
+    collection_name = db.get_mongo_col()
 
-def get_user_text():
+    for single_col in collection_name[1:]:
+        col_name, user_A_info, user_B_info = get_user_text(single_col)
+        compare_user(col_name, user_A_info, user_B_info)
 
-	collection_name = IO.get_mongo_col()
-    # collection_name = ['silkroad2_offer_item',''] #  adminlogg
+def get_user_text(collection_name):
+    print(collection_name)
     id = "user_id" #admin_id
 
     user_A_info = {}
     user_B_info = {}
 
     try:
-
         user_A_post = IO.read_text_file(user_A_json_filepath)
         user_B = db.get_user_id(collection_name, id)
 
