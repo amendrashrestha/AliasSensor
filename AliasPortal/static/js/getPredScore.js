@@ -22,18 +22,18 @@ $(document).ready(function() {
 //                }
                 if(data.same_user_prob <= 50){
                     $('#pred_result').css('color', 'blue');
-                    $("#pred_result").text("Diff User");
+                    $("#pred_result").text("Olika författare");
                 }
                 else if(data.same_user_prob > 50){
                     $('#pred_result').css('color', 'green');
-                    $("#pred_result").text("Same User");
+                    $("#pred_result").text("Samma författare");
                 }
                 else if(data.error_msg){
                     $('#pred_result').css('color', 'red');
                     $("#pred_result").text(data.error_msg);
                 }
                 else{
-                    $("#pred_result").text("Diff User");
+                    $("#pred_result").text("Samma författare");
                 }
 
 //                var same_per = data.same_user_prob * 100
@@ -42,14 +42,14 @@ $(document).ready(function() {
 //                console.log(same_per)
 //                console.log(diff_per)
 
-                $("#same_user_prob").text("Same User Prob: "+ data.same_user_prob + "%")
-                $("#diff_user_prob").text("Diff User Prob: "+ data.diff_user_prob + "%")
+                $("#same_user_prob").text("Samma författare: "+ data.same_user_prob + "%")
+                $("#diff_user_prob").text("Olika författare: "+ data.diff_user_prob + "%")
 
                 if(data.lang == "sv"){
-                    $("#lang").text("Language: "+ "Swedish")
+                    $("#lang").text("Språk: "+ "svenska")
                 }
                 if(data.lang == "en"){
-                    $("#lang").text("Language: "+ "English")
+                    $("#lang").text("Språk: "+ "engelska")
                 }
 
             }

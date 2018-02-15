@@ -24,14 +24,44 @@ def home():
 @app.route("/predict")
 def predict():
     try:
-        text1 = request.args.get('text1')
-        text2 = request.args.get('text2')
+        # text_field = request.form
+        # text1 = text_field['text1']
+        # text2 = text_field['text2']
+
+        text1 = request.args.get('text1').strip()
+        text2 = request.args.get('text2').strip()
+
+        len_text1 = len(text1)
+        len_text2 = len(text2)
+        # print(len_text1, len_text2)
 
         try:
-            text_lang = detect(text1)
+            while (len_text1 > 0 and len_text2 > 0):
+                print("inside while")
+                continue
+
+                if (len_text1 > 160 and len_text2 > 160):
+                    text_lang = detect(text1)
+
+                else:
+                    print(len_text1, len_text2)
+                    return jsonify(error_msg="Texten är för kort för att bedömmas (minst 160 tecken)")
+                    break
+
+            else:
+                return jsonify(error_msg="Skriv in en text")
 
         except Exception:
-            return jsonify(error_msg = "Please insert text")
+            # pass
+            # return jsonify(error_msg="Skriv in en text")
+            return jsonify(error_msg = "Texten är för kort för att bedömmas (minst 160 tecken)")
+
+
+        # try:
+        #     text_lang = detect(text1)
+        #
+        # except Exception:
+        #     return jsonify(error_msg = "Skriv in en text")
 
         try:
             if text_lang == "en":
@@ -56,7 +86,7 @@ def predict():
                 same_user_prob, diff_user_prob = IO.return_swe_result(x_test)
 
             else:
-                return jsonify(error_msg = "Language problem")
+                return jsonify(error_msg = "Språk ej identifierbart")
 
             return jsonify(
                 # pred_class = pred_class,
@@ -67,7 +97,7 @@ def predict():
 
         except ValueError:
             traceback.print_exc()
-            return jsonify(error_msg = "Something is wrong !!!")
+            return jsonify(error_msg = "Ett fel har uppstått")
 
     except Exception:
         return jsonify(error_msg = traceback.print_exc())

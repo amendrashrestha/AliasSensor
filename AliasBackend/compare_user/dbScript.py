@@ -11,11 +11,11 @@ def get_user_post(collection_name, user, filed_id):
     try:
         collection = db[collection_name]
         # print(user)
-        post_query = collection.find({filed_id: user}, {"text":1})
+        post_query = collection.find({filed_id: user}, {"content":1})
         posts_list = []
 
         for post in post_query:
-            post = post['text']
+            post = post['content']
             posts_list.append(post)
         return posts_list
 

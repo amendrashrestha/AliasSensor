@@ -12,17 +12,17 @@ import pandas as pd
 import AliasPortal.IOReadWrite as IO
 import AliasBackend.compare_user.dbScript as db
 
-user_A_json_filepath = os.environ['HOME'] + "/Desktop/File/User_A/mail"
+user_A_json_filepath = os.path.join(os.environ['HOME'] , "Desktop/File/tomazin")
 
-user_prob_filepath = os.environ['HOME'] + "/Desktop/File/user_prob.tsv"
+user_prob_filepath = os.path.join(os.environ['HOME'] , "Desktop/File/")
 
 def init():
-    user_A_info, user_B_info = get_user_text()
-    compare_user(user_A_info, user_B_info)
+    col_name, user_A_info, user_B_info = get_user_text()
+    compare_user(col_name, user_A_info, user_B_info)
 
 def get_user_text():
-    collection_name = 'meddelande' #  adminlogg
-    id = "skickare_id" #admin_id
+    collection_name = 'silkroad2_offer_item' #  adminlogg
+    id = "username" #admin_id
 
     user_A_info = {}
     user_B_info = {}
@@ -38,22 +38,24 @@ def get_user_text():
             posts = db.get_user_post(collection_name, single_user, id)
             user_B_info[single_user] = posts
 
-        user_A_info['mail'] = user_A_post
+        user_A_info['tomazin'] = user_A_post
 
-        return user_A_info, user_B_info
+        return collection_name, user_A_info, user_B_info
 
     except Exception:
         traceback.print_exc()
 
-def compare_user(user_a_list, user_b_list):
-    header_feature = ['User_A','User_B', 'Same','Diff', 'Type']
+def compare_user(col_name, user_a_list, user_b_list):
+    header_feature = ['User_A','User_B', 'Same','Diff']
 
-    if not os.path.exists(user_prob_filepath):
-        IO.create_file_with_header(user_prob_filepath, header_feature)
+    filepath = user_prob_filepath + col_name + ".tsv"
+
+    if not os.path.exists(filepath):
+        IO.create_file_with_header(filepath, header_feature)
 
     # compare_same_list_users(user_a_list)
     # compare_same_list_users(user_b_list)
-    compare_diff_list_users(user_a_list, user_b_list)
+    compare_diff_list_users(user_a_list, user_b_list, filepath)
 
 def compare_same_list_users(user_list):
     for i in range(0, len(user_list)-1):
@@ -69,17 +71,17 @@ def compare_same_list_users(user_list):
 
     print("------------------")
 
-def compare_diff_list_users(user_a_list, user_b_list):
+def compare_diff_list_users(user_a_list, user_b_list, filepath):
     for single_user_a in user_a_list:
         for single_user_b in tqdm(user_b_list):
             # print(single_user_a + " --> " + single_user_b)
-            print(single_user_b)
+            # print(single_user_b)
             text1 = user_a_list[single_user_a]
             text2 = user_b_list[single_user_b]
 
-            create_file_with_prob(single_user_a, single_user_b, text1, text2, "meddelande")
+            create_file_with_prob(single_user_a, single_user_b, text1, text2, filepath)
 
-def create_file_with_prob(user_a, user_b, text1, text2, type):
+def create_file_with_prob(user_a, user_b, text1, text2, filepath):
     try:
         post_A = " ".join(str(x) for x in text1)
         post_B = " ".join(str(x) for x in text2)
@@ -94,9 +96,9 @@ def create_file_with_prob(user_a, user_b, text1, text2, type):
 
         same_user_prob, diff_user_prob = IO.return_swe_result(x_test)
 
-        info = [user_a, user_b, same_user_prob, diff_user_prob, type]
+        info = [user_a, user_b, same_user_prob, diff_user_prob]
 
-        IO.write_in_file(user_prob_filepath, info)
+        IO.write_in_file(filepath, info)
 
     except Exception:
         traceback.print_exc()
