@@ -213,7 +213,7 @@ def FV_Swedish_header():
         smileys = [':\')', ':-)', ';-)', ':p', ':d', ':x', '<3', ':)', ';)', ':@', ':*', ':j', ':$', '%)']
         functions = get_function_words(props.swe_function_word_filepath)
 
-        tmp_LIWC_header = sorted(os.listdir(props.LIWC_filepath))
+        tmp_LIWC_header = sorted(os.listdir(props.LIWC_New_filepath))
 
         LIWC_header = [x.replace(".txt","") for x in tmp_LIWC_header]
 
