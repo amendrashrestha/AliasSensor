@@ -2,6 +2,7 @@ AliasPortal/static/model/
 AliasBackend/models/
 .DS_Store
 .idea
+.xml
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
