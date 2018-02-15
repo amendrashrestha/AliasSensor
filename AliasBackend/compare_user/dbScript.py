@@ -7,6 +7,14 @@ import traceback
 client = MongoClient('localhost', 27017) #dsg.foi.se
 db = client.compare_user
 
+def get_mongo_col():
+    try:
+        collection = db.collection_names()
+    except Exception:
+        traceback.print_exc()
+
+    return collection
+
 def get_user_post(collection_name, user, filed_id):
     try:
         collection = db[collection_name]
@@ -31,5 +39,7 @@ def get_user_id(collection_name, id):
         traceback.print_exc()
 
     return admin_list
+
+
 
 

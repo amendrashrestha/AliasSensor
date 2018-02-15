@@ -14,15 +14,17 @@ import AliasBackend.compare_user.dbScript as db
 
 user_A_json_filepath = os.path.join(os.environ['HOME'] , "Desktop/File/tomazin")
 
-user_prob_filepath = os.path.join(os.environ['HOME'] , "Desktop/File/")
+user_prob_filepath = os.path.join(os.environ['HOME'] , "Desktop/File/Result/")
 
 def init():
     col_name, user_A_info, user_B_info = get_user_text()
     compare_user(col_name, user_A_info, user_B_info)
 
 def get_user_text():
-    collection_name = 'silkroad2_offer_item' #  adminlogg
-    id = "username" #admin_id
+
+	collection_name = IO.get_mongo_col()
+    # collection_name = ['silkroad2_offer_item',''] #  adminlogg
+    id = "user_id" #admin_id
 
     user_A_info = {}
     user_B_info = {}
