@@ -17,16 +17,18 @@ import pandas as pd
 import IOReadWrite as IO
 import dbScript as db
 
-user_A_json_filepath = os.path.join(os.environ['HOME'] , "Desktop/File/tomazin")
+user_A_json_filepath = os.path.join(os.environ['HOME'] , "Desktop/File/Data/tomazin")
 
 user_prob_filepath = os.path.join(os.environ['HOME'] , "Desktop/File/Result/")
 
 def init():
     collection_name = db.get_mongo_col()
 
-    for single_col in collection_name[1:]:
-        col_name, user_A_info, user_B_info = get_user_text(single_col)
-        #compare_user(col_name, user_A_info, user_B_info)
+    for single_col in collection_name:
+    	if "system.indexes" not in single_col:
+	    	#print(single_col)
+	        col_name, user_A_info, user_B_info = get_user_text(single_col)
+	        compare_user(col_name, user_A_info, user_B_info)
 
 def get_user_text(collection_name):
     print(collection_name)
