@@ -22,17 +22,27 @@ user_A_json_filepath = os.path.join(os.environ['HOME'] , "Desktop/File/Data/toma
 user_prob_filepath = os.path.join(os.environ['HOME'] , "Desktop/File/Result/")
 
 def init():
+    # compare_with_json_user()
+    compare_with_flashback_user()
+
+def compare_with_json_user():
     collection_name = db.get_mongo_col()
 
     for single_col in collection_name:
-    	if "system.indexes" not in single_col:
-	    	#print(single_col)
-	        col_name, user_A_info, user_B_info = get_user_text(single_col)
-	        compare_user(col_name, user_A_info, user_B_info)
+        if "system.indexes" not in single_col:
+        # print(single_col)
+            col_name, user_A_info, user_B_info = get_user_text(single_col)
+            compare_user(col_name, user_A_info, user_B_info)
+
+def compare_with_flashback_user():
+    single_col = "post_compare_user"
+    col_name, user_A_info, user_B_info = get_user_text(single_col)
+    compare_user(col_name, user_A_info, user_B_info)
+
 
 def get_user_text(collection_name):
     print(collection_name)
-    id = "user_id" #admin_id
+    id = "user" #admin_id
 
     user_A_info = {}
     user_B_info = {}
@@ -42,10 +52,11 @@ def get_user_text(collection_name):
         user_B = db.get_user_id(collection_name, id)
 
         for single_user in user_B:
-            # print(single_user)
+            if single_user is not None and single_user != '':
+                # print(single_user)
             # single_user = "darknesss"
-            posts = db.get_user_post(collection_name, single_user, id)
-            user_B_info[single_user] = posts
+                posts = db.get_user_post(collection_name, single_user, id)
+                user_B_info[single_user] = posts
 
         user_A_info['tomazin'] = user_A_post
 
