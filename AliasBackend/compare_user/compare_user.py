@@ -23,7 +23,45 @@ user_prob_filepath = os.path.join(os.environ['HOME'] , "Desktop/File/Result/")
 
 def init():
     # compare_with_json_user()
-    compare_with_flashback_user()
+    # compare_with_flashback_user()
+    # get_collection_count()
+    get_filtered_user_post()
+
+def get_filtered_user_post():
+    filtered_user_text_filepath = os.path.join(os.environ['HOME'], "Desktop/File/filtered_users.tsv")
+
+    users = db.get_user_gt_ninety('result', 'User_B')
+
+    for single_user, score in users.items():
+
+        print('%s --> %d' %(single_user, score))
+
+        source = db.get_user_both('data_all', single_user, 'user_id')
+
+        if (len(source) > 0):
+            # print(post)
+            tmp_list = [single_user, score, source]
+            IO.write_in_file(filtered_user_text_filepath, tmp_list)
+            print("\n")
+
+    for single_user in users:
+        source = db.get_user_flashback_both('post_compare_user', single_user, 'user')
+        if (len(source) > 0):
+            # print(single_user)
+            # print(post)
+            tmp_list = [single_user, score, source]
+            IO.write_in_file(filtered_user_text_filepath, tmp_list)
+            print("\n")
+
+
+
+def get_collection_count():
+    collection_name = db.get_mongo_col()
+
+    for single_col in collection_name:
+        if "system.indexes" not in single_col:
+            col_count = db.return_col_count(single_col)
+            print('%s --> %d' %(single_col, col_count))
 
 def compare_with_json_user():
     collection_name = db.get_mongo_col()
