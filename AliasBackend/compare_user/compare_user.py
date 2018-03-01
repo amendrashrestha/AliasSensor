@@ -44,8 +44,10 @@ def get_filtered_user_post():
             IO.write_in_file(filtered_user_text_filepath, tmp_list)
             print("\n")
 
-    for single_user in users:
+    for single_user, score in users.items():
+
         source = db.get_user_flashback_both('post_compare_user', single_user, 'user')
+
         if (len(source) > 0):
             # print(single_user)
             # print(post)

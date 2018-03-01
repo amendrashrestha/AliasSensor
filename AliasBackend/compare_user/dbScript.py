@@ -51,7 +51,7 @@ def get_user_gt_ninety(collection_name, field):
         collection = db[collection_name]
         user_list = {}
 
-        user_query = collection.aggregate([{'$match': {'Same': {'$gt': 90}}}, {'$sort': {"count": -1}}, {"$limit": 100}])
+        user_query = collection.aggregate([{'$match': {'Same': {'$gt': 85}}}, {'$sort': {"count": -1}}, {"$limit": 500}])
 
         for single_info in user_query:
             user = single_info["User_B"]
@@ -74,7 +74,8 @@ def get_user_both(collection_name, user, filed_id):
 
         for post in post_query:
             post = post['source']
-            posts_list.append(post)
+            if post not in posts_list:
+                posts_list.append(post)
 
         return ''.join(posts_list)
 
@@ -93,7 +94,8 @@ def get_user_flashback_both(collection_name, user, filed_id):
 
         for post in post_query:
             post = post['category']
-            posts_list.append(post)
+            if post not in posts_list:
+                posts_list.append(post)
 
         return ''.join(posts_list)
 
