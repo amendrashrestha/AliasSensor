@@ -46,12 +46,12 @@ def return_col_count(col_name):
     collection = db[col_name]
     return collection.find({}).count()
 
-def get_user_gt_ninety(collection_name, field):
+def get_user_gt_X(collection_name, field, threshold, limit):
     try:
         collection = db[collection_name]
         user_list = {}
 
-        user_query = collection.aggregate([{'$match': {'Same': {'$gt': 85}}}, {'$sort': {"count": -1}}, {"$limit": 500}])
+        user_query = collection.aggregate([{'$match': {'Same': {'$gt': threshold}}}, {'$sort': {"count": -1}}, {"$limit": limit}])
 
         for single_info in user_query:
             user = single_info["User_B"]

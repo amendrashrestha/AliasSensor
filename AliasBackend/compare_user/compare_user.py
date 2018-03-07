@@ -28,15 +28,18 @@ def init():
     get_filtered_user_post()
 
 def get_filtered_user_post():
-    filtered_user_text_filepath = os.path.join(os.environ['HOME'], "Desktop/File/filtered_users.tsv")
+    filtered_user_text_filepath = os.path.join(os.environ['HOME'], "Desktop/File/LatestResult/flashback.tsv")
 
-    users = db.get_user_gt_ninety('result', 'User_B')
+    threshold = 50
+    limit = 50
+
+    users = db.get_user_gt_X('result', 'User_B', threshold, limit)
 
     for single_user, score in users.items():
 
         print('%s --> %d' %(single_user, score))
 
-        source = db.get_user_both('data_all', single_user, 'user_id')
+        source = db.get_user_both('silkroad2_userdetails', single_user, 'user_id')
 
         if (len(source) > 0):
             # print(post)
